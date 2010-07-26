@@ -6,17 +6,42 @@
 #include "apporo.h"
 
 
-
-
 void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string) {
+  const char* result = (char*)calloc(sizeof(char), INPUT_LINE_LEN);
+  if (!strcmp(function_name, "surface_ngram")) {
+    int result_num = app_surface_ngram_match(sufarr_file_name, ngram_num, result_num, ranking_mode, input_string, result, INPUT_LINE_LEN);
+  }
+  else if (!strcmp(function_name, "kana_ngram")) {
+  }
+  else if (!strcmp(function_name, "roman_ngram")) {
+  }
+  printf("[query] : %s\n", input_string);
+  printf("[result]\n%s\n", result);
+  free(result);
+  result = NULL;
   return;
 }
 
-void app_search_by_file(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string) {
+void app_search_by_stream(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, FILE* input_file_p) {
+  const char* tmp_buf = (char*)calloc(sizeof(char), MAX_INPUT_LEN);
+  while (fgets(tmp_buf, MAX_INPUT_LEN, input_file_p)) {
+    int tmp_buf_len = strlen(tmp_buf);
+    if (tmp_buf_len <= 1) {
+      memset(tmp_buf, '0x00', tmp_buf_len);
+      continue;
+    }
+    app_search_by_query(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, tmp_buf);
+    memset(tmp_buf, '0x00', tmp_buf_len);
+  }
+  free(tmp_buf);
+  tmp_buf = NULL;
   return;
 }
 
-void app_search_by_stream(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, FILE* stdio) {
+void app_search_by_file(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_file_name) {
+  FILE* input_file_p = fopen(input_file_name, "r");
+  app_search_by_stream(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, input_file_p);
+  fclose(input_file_p);
   return;
 }
 
