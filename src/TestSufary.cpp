@@ -5,9 +5,35 @@
 #include <sufary.h>
 #include "apporo.h"
 
+class N {
+public:
+  int gram;
+  int* gram_p;
+  int max_gram;
+  int min_gram;
+  double threshold;
+  int getGram() const { return gram; }
+  void setGram(int g)  { gram = g; return; }
+  int* getGramP() const { return gram_p; }
+  int getMaxGram() const { return max_gram; }
+  int getMinGram() const { return min_gram; }
+  double getThreshold() const { return threshold; }
+  N(int g) : gram(g) {};
+  N(int* gp) : gram_p(gp) {};
+  N(int max, int min) : max_gram(max), min_gram(min) {};
+  N(int g, double t) : gram(g), threshold(t) {};
+  N(int* gp, double t) : gram_p(gp), threshold(t) {};
+  N(int max, int min, double t) : max_gram(max), min_gram(min), threshold(t) {};
+};
+
+class Q {
+  
+public:
+  char* sufarr_file_name;
+};
 
 void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string) {
-  const char* result = (char*)calloc(sizeof(char), INPUT_LINE_LEN);
+  char* result = (char*)calloc(sizeof(char), INPUT_LINE_LEN);
   if (!strcmp(function_name, "surface_ngram")) {
     int result_num = app_surface_ngram_match(sufarr_file_name, ngram_num, result_num, ranking_mode, input_string, result, INPUT_LINE_LEN);
   }
