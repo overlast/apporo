@@ -4,6 +4,7 @@
 
 #include <sufary.h>
 #include "apporo.h"
+#include "apporo_util.h"
 
 class N {
 public:
@@ -32,10 +33,10 @@ public:
   char* sufarr_file_name;
 };
 
-void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string) {
-  char* result = (char*)calloc(sizeof(char), INPUT_LINE_LEN);
+void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string, int input_string_len) {
+  char* result = (char*)calloc(sizeof(char), MAX_LINE_LEN);
   if (!strcmp(function_name, "surface_ngram")) {
-    int result_num = app_surface_ngram_match(sufarr_file_name, ngram_num, result_num, ranking_mode, input_string, result, INPUT_LINE_LEN);
+    int result_num = app_surface_ngram_match(result, MAX_LINE_LEN, sufarr_file_name, ngram_num, result_num, ranking_mode, input_string, input_string_len);
   }
   else if (!strcmp(function_name, "kana_ngram")) {
   }
@@ -49,15 +50,15 @@ void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result
 }
 
 void app_search_by_stream(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, FILE* input_file_p) {
-  const char* tmp_buf = (char*)calloc(sizeof(char), MAX_INPUT_LEN);
+  char* tmp_buf = (char*)calloc(sizeof(char), MAX_INPUT_LEN);
   while (fgets(tmp_buf, MAX_INPUT_LEN, input_file_p)) {
     int tmp_buf_len = strlen(tmp_buf);
     if (tmp_buf_len <= 1) {
-      memset(tmp_buf, '0x00', tmp_buf_len);
+      memset(tmp_buf, '\0', tmp_buf_len);
       continue;
     }
-    app_search_by_query(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, tmp_buf);
-    memset(tmp_buf, '0x00', tmp_buf_len);
+    app_search_by_query(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, (const char*)tmp_buf, tmp_buf_len);
+    memset(tmp_buf, '\0', tmp_buf_len);
   }
   free(tmp_buf);
   tmp_buf = NULL;
@@ -92,7 +93,8 @@ int main(int argc, char* argv[]) {
   const char* input_string = NULL;
   const char* ranking_mode = "ngram";
   const char* function_name = "search_ngram";
-  
+  int input_string_len = 0;
+
   while (1 < argc) {// parse comand-line options
     if ('-' != argv[1][0]) {// may be invalid prefix
       app_print_usage();
@@ -177,7 +179,8 @@ int main(int argc, char* argv[]) {
   }
 
   if ((NULL != input_string) && (("" != input_string))) {
-    app_search_by_query(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, input_string);
+    input_string_len = strlen(input_string);
+    app_search_by_query(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, input_string, input_string_len);
   }
   else if ((NULL != input_file_name) && (("" != input_file_name))) {
     app_search_by_file(sufarr_file_name, ngram_num, result_num, function_name, ranking_mode, input_file_name);
