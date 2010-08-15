@@ -6,6 +6,10 @@
 #include "apporo.h"
 #include "apporo_util.h"
 
+// todo
+// 1. re-allocate the result buffer using realloc( now i use calloc() and defined Integer number. it's too bad)
+// 2. rewrite usage when i will use realloc
+
 class N {
 public:
   int gram;
@@ -35,13 +39,10 @@ public:
 
 void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string, int input_string_len) {
   char* result = (char*)calloc(sizeof(char), MAX_LINE_LEN);
-  if (!strcmp(function_name, "surface_ngram")) {
-    int result_num = app_surface_ngram_match(result, MAX_LINE_LEN, sufarr_file_name, ngram_num, result_num, ranking_mode, input_string, input_string_len);
+  if (!strcmp(function_name, "ngram")) {
+    int result_num = app_ngram_match(result, MAX_LINE_LEN, sufarr_file_name, ngram_num, result_num, ranking_mode, input_string, input_string_len);
   }
-  else if (!strcmp(function_name, "kana_ngram")) {
-  }
-  else if (!strcmp(function_name, "roman_ngram")) {
-  }
+
   printf("[query] : %s\n", input_string);
   printf("[result]\n%s\n", result);
   free(result);
@@ -78,7 +79,7 @@ void app_print_usage(void) {
   printf(" -s : index file name (must set -s param or give filepath of suffix array index file).\n");
   printf(" -n : number of N which use to generate N-gram tokens from index (2 is defalt).\n");
   printf(" -r : number of search result (100 is defalt).\n");
-  printf(" -f : name of search function (surface_ngram is defalt).\n");
+  printf(" -f : name of search function (ngram is defalt).\n");
   printf(" -m : mode of search result ranking (ngram(ranking depends on hit number) is defalt).\n");
   printf(" -q : query to search index (must set -q param or give filepath of text-format file).\n");
   printf(" -h : print help message.\n");
@@ -92,7 +93,7 @@ int main(int argc, char* argv[]) {
   const char* input_file_name = NULL;
   const char* input_string = NULL;
   const char* ranking_mode = "ngram";
-  const char* function_name = "search_ngram";
+  const char* function_name = "ngram";
   int input_string_len = 0;
 
   while (1 < argc) {// parse comand-line options

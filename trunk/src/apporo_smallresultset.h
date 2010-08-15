@@ -1,0 +1,6 @@
+#ifndef APPORO_SMALLRESULTSET_H
+#define APPORO_SMALLRESULTSET_H
+
+//
+
+#endif
