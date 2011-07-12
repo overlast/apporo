@@ -1,2 +1,0 @@
-//small result set
-
