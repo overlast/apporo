@@ -1,8 +1,33 @@
 #ifndef APPORO_SEARCH_H
 #define APPORO_SEARCH_H
 
-#define DEBUG2 1
+#include <iostream>
+#include <algorithm>
+#include <set>
+#include <string>
+#include <vector>
+#include <map>
+#include "apporo_tsubomi_db.h"
+#include "apporo_query.h"
+#include "apporo_strdistance.h"
+#include "apporo_util.h"
 
-int app_ngram_match(char* result_buf, int result_buf_len, const char* sufarr_file_name, int ngram_num, int result_num, const char* ranking_mode, const char* input_string, int input_string_len);
+namespace apporo {
+  namespace search {
+    class NgramSearch {
+    public:
+      NgramSearch (std::string engine, std::string index_path, int entry_buf_len);
+      ~NgramSearch ();
+      std::string engine;
+      std::string index_path;
+      int entry_buf_len;
+      apporo::strage::TsubomiDBSearch *tdb;
+      std::vector < std::pair <std::string, apporo::strage::sa_range> > getRange(apporo::query::NgramQuery *nq);
+      std::vector < std::pair <apporo::strage::sa_index, int> > getIDMap(std::map <apporo::strage::sa_index, apporo::strage::sa_index> &id_index_map, std::vector < std::pair<std::string, apporo::strage::sa_range> > range_vector, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist);
+      std::vector < std::pair <double, std::string> > matchApproximately(std::string engine, std::string index_path);
+      std::vector < std::pair <double, std::string> > rerankAndGetResult(std::vector <std::pair <apporo::strage::sa_index, int> > id_freq_vec, std::map <apporo::strage::sa_index, apporo::strage::sa_index> id_index_map, int result_num, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist);
+    };
+  }
+}
 
 #endif
