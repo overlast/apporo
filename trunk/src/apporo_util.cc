@@ -19,14 +19,16 @@ namespace apporo {
       return res;
     }
     
-    void showResult(vector < pair <double, string> > result, NgramQuery *nq, StringDistance *strdist) {
-      int result_len = result.size();
-      for (int i = 0; i < result_len; i++) {
+    void showResult(vector < pair <double, string> > result, NgramQuery *nq, StringDistance *strdist, int result_num) {
+      int result_list_len = result.size();
+      for (int i = 0; i < result_list_len; i++) {
+	if ((result_num > 0) && (i >= result_num)) { break; }
 	if ((nq != NULL) && (nq->dist_threshold > 0.0)) {
 	  if (result[i].first < nq->dist_threshold) { continue;}
 	}
 	cout << i << ":" << result[i].first << ":" << result[i].second << endl;
       }
+      return;
     }
   }
 }
