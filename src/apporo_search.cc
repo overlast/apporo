@@ -47,7 +47,6 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     pair <string, sa_range> item = (*it);
     //ngram_que.pop();
     string query_str = item.first;
-    int query_str_len = query_str.size();
     sa_range p = item.second;
     //cout << p.first << ":" << p.second << endl;
     for (sa_index i = p.first; i <= p.second; i++) {
