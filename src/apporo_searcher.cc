@@ -13,7 +13,7 @@ using namespace apporo::query;
 int main(int argc, char** argv) {
   int res = 0;
   try {
-    string query = "東京都渋谷区東";
+    string query = "";
     int ngram_length = 3;
     bool is_pre = true;
     bool is_suf = true;
@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
 	case 'i': index_path = argv[i]; break;
 	case 'q': query = argv[i]; break;
 	case 'n': ngram_length = atoi(argv[i]); break;
-	case 't': dist_threshold = (double)(atoi(argv[i])) ;break;
+	case 't': dist_threshold = atof(argv[i]) ;break;
 	case 'd': dist_func = argv[i] ;break;
 	case 'e': engine = argv[i] ;break;
 	case 'b': entry_buf_len = atoi(argv[i]) ;break;
