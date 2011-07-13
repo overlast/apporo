@@ -13,12 +13,6 @@ namespace apporo {
     typedef int                           sa_index;
     typedef std::pair<sa_index, sa_index> sa_range;
 
-    struct second_order {
-      bool operator()(const pair <sa_index, int> &x, const pair <sa_index, int> &y) const {
-	return x.second > y.second;
-      }
-    };
-    
     const int utf8_char_size[] = {
       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
