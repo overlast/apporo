@@ -10,9 +10,8 @@ namespace apporo {
     public:
       std::string dist_func;
       int ngram_length;
-      double dist_threshold;
       int query_chars_num;
-      
+      double dist_threshold;
       std::pair <int, int> search_threshold;
       StringDistance(std::string dist_func, int ngram_length_, int query_chars_num = 0, double dist_threshold = 0.0);
       ~StringDistance();

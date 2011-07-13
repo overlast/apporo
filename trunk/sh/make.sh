@@ -12,6 +12,6 @@ ABSDIR=$(cd $(dirname $0) && pwd)
 
 cd ${ABSDIR}/../src
 echo "compile apporo_indexer"
-g++ -O2 -g apporo_tsubomi_db.cc apporo_index.cc -o ${ABSDIR}/../bin/apporo_indexer -ltsubomi
+g++ -O2 -Wall -g apporo_tsubomi_db.cc apporo_index.cc -o ${ABSDIR}/../bin/apporo_indexer -ltsubomi
 echo "compile apporo_searcher"
-g++ -O2 -g apporo_searcher.cc apporo_utf8.cc apporo_util.cc apporo_tsubomi_db.cc apporo_query.cc apporo_strdistance.cc apporo_search.cc -o ${ABSDIR}/../bin/apporo_searcher -ltsubomi
+g++ -O2 -Wall -g apporo_searcher.cc apporo_utf8.cc apporo_util.cc apporo_tsubomi_db.cc apporo_query.cc apporo_strdistance.cc apporo_search.cc -o ${ABSDIR}/../bin/apporo_searcher -ltsubomi

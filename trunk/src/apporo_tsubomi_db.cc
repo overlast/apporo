@@ -53,7 +53,8 @@ namespace apporo {
       string did_path = (string)filename_ + ".did";
       vector <sa_index> did;
       for (sa_index offset = 0; offset < mr_file_.size(); offset++) {
-	for (int i = 0; i < boundary.size(); i++) {
+	int b_size = boundary.size();
+	for (int i = 0; i < b_size; i++) {
 	  if (mr_file_[offset] == boundary[i]) {
 	    did.push_back(offset);
 	    break;

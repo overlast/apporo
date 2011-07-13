@@ -18,7 +18,8 @@ namespace apporo {
 	2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
 	3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
       };
-      for (int i = 0; i < str.size();) {
+      int str_size = str.size();
+      for (int i = 0; i < str_size;) {
 	int len = utf8_char_size[(unsigned char)(str[i])];
 	vec.push_back(len);
 	i += len;

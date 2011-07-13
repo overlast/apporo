@@ -57,12 +57,12 @@ int main(int argc, char** argv) {
     // 閾値がある場合は枝刈り用のパラメタも生成
     StringDistance *strdist = new StringDistance(dist_func, ngram_length, dist_threshold, nq->chars_num); //engine に非依存
     // 閾値がない場合はインスタンスができるだけ
-    StringDistance *strdist_no_threshold = new StringDistance(dist_func, ngram_length); //engine に非依存
+    //StringDistance *strdist_no_threshold = new StringDistance(dist_func, ngram_length); //engine に非依存
 
     // 検索用のインスタンスを生成
     NgramSearch *ngram_searcher = new NgramSearch(engine, index_path, entry_buf_len); //engine に依存
-
-    int entry_num_par_page = 10;//Resultを作ったらつかえるな
+    
+    //int entry_num_par_page = 10;//Resultを作ったらつかえるな
     
     // 検索用のインスタンスで検索開始
     // Step1. N-gram query の token ごとに 集計済みDoc ID を取得
