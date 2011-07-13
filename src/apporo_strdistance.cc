@@ -17,8 +17,8 @@ StringDistance::~StringDistance() { return; }
 
 pair <int, int> StringDistance::getSearchThreshold(int chars_num, int ngram_length, double dist_threshold) {
   pair <int, int> threshold;
-  int min = (chars_num + ngram_length + 1) - ((chars_num + ngram_length + 1) * (1.0 - dist_threshold) * ngram_length);
-  int max = (chars_num + ngram_length + 1) - ((chars_num + ngram_length + 1) * (1.0 - dist_threshold) + (ngram_length - 1));
+  int min = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) * (double)ngram_length);
+  int max = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) + (double)(ngram_length - 1));
   if (min < 0) { min = 0; }
   if (max < 0) { max = 0; }
   //cout << "score threshold:"<< min << "-" << max << endl;
