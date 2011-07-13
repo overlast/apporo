@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
     vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, result_num, nq, strdist); //engine に依存
     
     // 結果を出力する
-    showResult(result, nq, strdist); //engine に非依存
+    showResult(result, result_num, nq, strdist); //engine に非依存
 
   } catch (const char *err) {
     cerr << err << endl;

@@ -9,7 +9,7 @@
 namespace apporo {
   namespace util {
       std::string getFirstColumn(std::string entry, char boundary = '\t');
-      void showResult(std::vector < std::pair <double, std::string> > result, apporo::query::NgramQuery *nq = NULL, apporo::strdistance::StringDistance *strdist = NULL);
+      void showResult(std::vector < std::pair <double, std::string> > result, apporo::query::NgramQuery *nq = NULL, apporo::strdistance::StringDistance *strdist = NULL, int result_num = 0);
     struct pair_first_low_order {
       template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
     return x.first > y.first;
