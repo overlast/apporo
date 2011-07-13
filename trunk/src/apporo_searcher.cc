@@ -14,10 +14,10 @@ int main(int argc, char** argv) {
   int res = 0;
   try {
     string query = "";
-    int ngram_length = 3;
-    bool is_pre = true;
-    bool is_suf = true;
-    bool is_utf8 = true;
+    int ngram_length = 2;
+    bool is_pre = false;
+    bool is_suf = false;
+    bool is_utf8 = false;
     double dist_threshold = 0.0;
     string index_path = "";
     string dist_func = "edit";
