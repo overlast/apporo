@@ -106,7 +106,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     //cout << (*i).first << ":" << (*i).second << endl;
   }
   //cout << id_freq_vec.size() << endl;
-  sort(id_freq_vec.begin(), id_freq_vec.end(), pair_first_low_order());
+  sort(id_freq_vec.begin(), id_freq_vec.end(), pair_second_low_order());
   return id_freq_vec;
 }
 
