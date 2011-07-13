@@ -118,7 +118,6 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
     pair <sa_index, int> item = *it;
     //cout << item.first << '/' << item.second << endl;
     char tmp_buf[this->entry_buf_len];
-    tmp_buf[0] = '\0';
     sa_index pos;
     this->tdb->get_line(id_index_map[item.first], tmp_buf, entry_buf_len, &pos);
     //cout << "id:" << item.first << ":" << id_index_map[item.first] << "pos:"<< pos <<endl;
