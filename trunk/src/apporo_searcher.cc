@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
     NgramQuery *nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold); //engine に非依存
 
     // 閾値がある場合は枝刈り用のパラメタも生成
-    StringDistance *strdist = new StringDistance(dist_func, ngram_length, dist_threshold, nq->chars_num); //engine に非依存
+    StringDistance *strdist = new StringDistance(dist_func, ngram_length, nq->chars_num, dist_threshold); //engine に非依存
     // 閾値がない場合はインスタンスができるだけ
     //StringDistance *strdist_no_threshold = new StringDistance(dist_func, ngram_length); //engine に非依存
 
