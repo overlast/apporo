@@ -73,10 +73,10 @@ int main(int argc, char** argv) {
     vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist); //engine に依存
 
     // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
-    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, result_num, nq, strdist); //engine に依存
+    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num); //engine に依存
     
     // 結果を出力する
-    showResult(result, result_num, nq, strdist); //engine に非依存
+    showResult(result, nq, strdist, result_num); //engine に非依存
 
   } catch (const char *err) {
     cerr << err << endl;
