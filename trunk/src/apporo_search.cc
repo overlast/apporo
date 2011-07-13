@@ -28,7 +28,7 @@ vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
     ngram_vector.push_back(ngram_freq);
     //ngram_que_count++;
   }
-  sort(ngram_vector.begin(), ngram_vector.end(), sa_range_low_order());
+  sort(ngram_vector.begin(), ngram_vector.end(), sa_range_up_order());
   return ngram_vector;
 }
 
@@ -106,6 +106,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     //cout << (*i).first << ":" << (*i).second << endl;
   }
   //cout << id_freq_vec.size() << endl;
+  sort(id_freq_vec.begin(), id_freq_vec.end(), pair_first_low_order());
   return id_freq_vec;
 }
 
@@ -113,7 +114,7 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
   int push_count = 0;
   vector < pair <double, string> > result;
   for (vector < pair <sa_index, int> >::iterator it = id_freq_vec.begin(); it != id_freq_vec.end(); it++) {
-    if (push_count == result_num) { break; } // どうする
+    //if (push_count == result_num) { break; } // どうする
     pair <sa_index, int> item = *it;
     //cout << item.first << '/' << item.second << endl;
     char tmp_buf[this->entry_buf_len];
@@ -135,7 +136,7 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
       push_count++; // 足して良い時と悪い時がある
     }
   }
-  sort(result.begin(), result.end(), pair_first_up_order());
+  sort(result.begin(), result.end(), pair_first_low_order());
   return result;
 }
 
