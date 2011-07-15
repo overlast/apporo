@@ -49,7 +49,7 @@ namespace apporo {
       return;
     }
 
-    void TsubomiDBIndex::makeDIDIndex(string boundary) {
+    void TsubomiDBIndex::makeDIDIndex(string &boundary) {
       string did_path = (string)filename_ + ".did";
       vector <sa_index> did;
       for (sa_index offset = 0; offset < mr_file_.size(); offset++) {

@@ -44,7 +44,7 @@ namespace apporo {
     public:
       TsubomiDBIndex(string &filename);
       ~TsubomiDBIndex();
-      void makeDIDIndex(string boundary);
+      void makeDIDIndex(string &boundary);
       void mkary_make(std::vector<sa_index> &sa, const char *seps, bool is_utf8);
     };
   }

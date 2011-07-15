@@ -6,7 +6,7 @@ using namespace apporo;
 using namespace apporo::utf8;
 using namespace apporo::query;
 
-NgramQuery::NgramQuery (string query_, int ngram_length_, bool is_pre_, bool is_suf_, bool is_utf8_, double dist_threshold_)
+NgramQuery::NgramQuery (string &query_, int ngram_length_, bool is_pre_, bool is_suf_, bool is_utf8_, double dist_threshold_)
   : query(query_), ngram_length(ngram_length_), is_pre(is_pre_), is_suf(is_suf_), is_utf8(is_utf8_), dist_threshold(dist_threshold_) {
   if (is_utf8) {
     utf8_boundary = getUTF8Width(query);

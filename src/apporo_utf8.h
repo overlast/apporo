@@ -11,7 +11,7 @@ namespace apporo {
       UTF8String() {};
       ~UTF8String() {};
     };
-    std::vector <int> getUTF8Width(std::string str);
+    std::vector <int> getUTF8Width(std::string &str);
   }
 }
 

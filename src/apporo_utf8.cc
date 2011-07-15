@@ -6,7 +6,7 @@ using namespace apporo::utf8;
 
 namespace apporo {
   namespace utf8 {
-    vector <int> getUTF8Width(string str) {
+    vector <int> getUTF8Width(string &str) {
       vector <int> vec;
       const int utf8_char_size[] = {
 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

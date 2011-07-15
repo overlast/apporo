@@ -19,7 +19,7 @@ namespace apporo {
       double dist_threshold;
       std::vector <int> utf8_boundary;
       std::set <std::string> tokens;
-      NgramQuery (std::string query_, int ngram_length_, bool is_pre_ = false, bool is_suf_ = false,  bool is_utf8_ = false, double dist_threshold = 0.0);
+      NgramQuery (std::string &query_, int ngram_length_, bool is_pre_ = false, bool is_suf_ = false,  bool is_utf8_ = false, double dist_threshold = 0.0);
       ~NgramQuery ();
       int generateNgramTokens();
       int tuneNgramLength(int ngram_length, double dist_threshold);
