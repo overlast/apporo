@@ -114,7 +114,7 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
   int push_count = 0;
   vector < pair <double, string> > result;
   for (vector < pair <sa_index, int> >::iterator it = id_freq_vec.begin(); it != id_freq_vec.end(); it++) {
-    if ((result_num > 0) && (push_count == result_num)) { break; } // どうする
+    //if ((result_num > 0) && (push_count == result_num)) { break; } // どうする
     pair <sa_index, int> item = *it;
     //cout << item.first << '/' << item.second << endl;
     char tmp_buf[this->entry_buf_len];
