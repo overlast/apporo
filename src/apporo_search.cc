@@ -113,8 +113,9 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
 vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <sa_index, int> > &id_freq_vec, map <sa_index, sa_index> &id_index_map, NgramQuery *nq, StringDistance *strdist, int result_num) {
   int push_count = 0;
   vector < pair <double, string> > result;
+  int bucket_num = result_num * 10;
   for (vector < pair <sa_index, int> >::iterator it = id_freq_vec.begin(); it != id_freq_vec.end(); it++) {
-    //if ((result_num > 0) && (push_count == result_num)) { break; } // どうする
+    if ((result_num > 0) && (push_count == bucket_num)) { break; } // どうする
     pair <sa_index, int> item = *it;
     //cout << item.first << '/' << item.second << endl;
     char tmp_buf[this->entry_buf_len];
