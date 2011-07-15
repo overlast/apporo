@@ -8,7 +8,7 @@ using namespace apporo::util;
 using namespace apporo::search;
 using namespace apporo::query;
 
-NgramSearch::NgramSearch (string engine_, string index_path_, int entry_buf_len_) 
+NgramSearch::NgramSearch (string &engine_, string &index_path_, int entry_buf_len_) 
   : engine(engine_), index_path(index_path_), entry_buf_len(entry_buf_len_) {
   if (engine == "tsubomi") {
     tdb = new TsubomiDBSearch(index_path);
@@ -32,7 +32,7 @@ vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
   return ngram_vector;
 }
 
-vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &id_index_map, vector < pair<string, sa_range> > range_vector, NgramQuery *nq, StringDistance *strdist) {
+vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &id_index_map, vector < pair<string, sa_range> > &range_vector, NgramQuery *nq, StringDistance *strdist) {
   int ngram_que_count = range_vector.size();
   int ngram_que_limit = ngram_que_count;
   vector < pair <sa_index, int> > id_freq_vec;
@@ -110,7 +110,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
   return id_freq_vec;
 }
 
-vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <sa_index, int> > id_freq_vec, map <sa_index, sa_index> id_index_map, NgramQuery *nq, StringDistance *strdist, int result_num) {
+vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <sa_index, int> > &id_freq_vec, map <sa_index, sa_index> &id_index_map, NgramQuery *nq, StringDistance *strdist, int result_num) {
   int push_count = 0;
   vector < pair <double, string> > result;
   for (vector < pair <sa_index, int> >::iterator it = id_freq_vec.begin(); it != id_freq_vec.end(); it++) {

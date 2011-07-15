@@ -6,7 +6,7 @@ using namespace std;
 using namespace apporo;
 using namespace apporo::strdistance;
 
-StringDistance::StringDistance(string dist_func_, int ngram_length_, int query_chars_num_, double dist_threshold_)
+StringDistance::StringDistance(string &dist_func_, int ngram_length_, int query_chars_num_, double dist_threshold_)
   : dist_func(dist_func_), ngram_length(ngram_length_), query_chars_num(query_chars_num_), dist_threshold(dist_threshold_) { 
   if ((dist_threshold_ > 0.0) && (query_chars_num > 0)) {
     search_threshold = getSearchThreshold(query_chars_num, ngram_length, dist_threshold);
@@ -46,7 +46,7 @@ vector < vector <int> > StringDistance::initMatrix(int num) {
 
 
 //探索打ち切れる
-double StringDistance::getEditDist(string str1, string str2) {
+double StringDistance::getEditDist(string &str1, string &str2) {
   double res = 0.0;
   int str1_len = str1.size();
   int str2_len = str2.size();
@@ -72,8 +72,14 @@ double StringDistance::getEditDist(string str1, string str2) {
   res =  1.0 - ((double)matrix[str1_len][str2_len] / (double)matrix_width);
   return res;
 }
-
-double StringDistance::getUTF8EditDist(string str1, vector <int> vec1, string str2) {
+/*
+template <typename T>
+double StringDistance::getBPAEditDist(string &str1, string &str2) {
+  
+  
+}
+*/
+double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string &str2) {
   
   double res = 0.0;
   vector <int> vec2 = apporo::utf8::getUTF8Width(str2);
@@ -101,7 +107,7 @@ double StringDistance::getUTF8EditDist(string str1, vector <int> vec1, string st
   return res;
 }
 
-double StringDistance::getStringDistance(string str_dist, string str1, string str2, vector <int> str1_utf8_width) {
+double StringDistance::getStringDistance(string &str_dist, string &str1, string &str2, vector <int> &str1_utf8_width) {
   double dist = 0.0;
   if (str_dist == "edit") {
     if (!str1_utf8_width.empty()) {
