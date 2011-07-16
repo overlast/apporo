@@ -14,6 +14,7 @@ namespace apporo {
       for (int i = 0; i < entry_len; i++) {
 	if (entry[i] == boundary) {
 	  res = entry.substr(0, i);
+	  break;
 	}
       }
       return res;

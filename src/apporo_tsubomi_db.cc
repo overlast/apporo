@@ -79,7 +79,7 @@ namespace apporo {
 	  cout << "u+t" << endl;
 	  bool flg = true;
 	  for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
-	    if (this->mr_file_[offset] == '\t') { sa.push_back(offset); flg = false; }
+	    if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
 	    else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
 	    else {
 	      if (flg) { sa.push_back(offset); }
@@ -101,7 +101,7 @@ namespace apporo {
 	bool flg = true;
 	cout << "t" << endl;
 	for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
-	  if (this->mr_file_[offset] == '\t') { sa.push_back(offset); flg = false; }
+	  if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
 	  else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
 	  else {
 	    if (flg) { sa.push_back(offset); }
