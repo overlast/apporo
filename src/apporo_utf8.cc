@@ -20,9 +20,12 @@ namespace apporo {
       };
       int str_size = str.size();
       for (int i = 0; i < str_size;) {
-	int len = utf8_char_size[(unsigned char)(str[i])];
-	vec.push_back(len);
-	i += len;
+	if (str[i] != '\0') {
+	  int len = utf8_char_size[(unsigned char)(str[i])];
+	  vec.push_back(len);
+	  i += len;
+	}
+	else { break; }
       }
       return vec;
     }

@@ -106,6 +106,8 @@ template <typename T>
 double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, string &str2) {
   double res = 0.0;
   vector <int> vec2 = apporo::utf8::getUTF8Width(str2);
+  //cout << vec2.size() << endl;
+  //cout << vec1.size() << endl;
   int vec1_len = vec1.size();
   int vec2_len = vec2.size();
 
@@ -119,9 +121,11 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
 
   int m = v1.size();
   int n = v2.size();
-  
-  if (m > bit_len) { m = bit_len * 8; }
-  if (n > bit_len) { n = bit_len * 8; }
+  //cout << vec2.size() << endl;
+  //cout << vec1.size() << endl;  
+
+  if (m > bit_len) { m = bit_len; }
+  if (n > bit_len) { n = bit_len; }
   //cout << "s1:" << s1 << " s2:" << s2 << endl;  
   //cout << "m:"<< m << ":n:" << n << endl;
 
@@ -131,7 +135,8 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   int err = m;
   map <string, T> B; // when ASCII, string have to replace with char.
   for (int i = 0, focus = 0; i < m; focus += v1[i], i++) {
-    //cout << v1[i] << ":" << s1.substr(focus, v1[i]) << endl;
+    //if (focus + v1[i] >= (int)s1.size()) {break;}
+    //cout << v1[i] << ":" << s1.substr(focus, v1[i]) << ":" << s1 << ":"<< i << ":" << m<< endl;
     if (B.find(s1.substr(focus, v1[i])) != B.end()) {
       B[s1.substr(focus, v1[i])] |= one << i;
     }
@@ -146,6 +151,7 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   for (int j = 0, focus = 0; j < n; focus += v2[j], j++) {
     T X;
     //cout << v2[j] << ":" << s2.substr(focus, v2[j]) << endl;
+    //if (focus + v2[j] >= (int)s2.size()) {break;}
     if (B.find(s2.substr(focus, v2[j])) != B.end()){ X = B[s2.substr(focus, v2[j])] | VN; }
     else { X = 0 + VN; }
     T D0 = ((VP + (X & VP)) ^ VP) | X;
@@ -266,7 +272,7 @@ double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string 
 double StringDistance::getStringDistance(string &str_dist, string &str1, string &str2, vector <int> &str1_utf8_width) {
   double dist = 0.0;
   if (!str1_utf8_width.empty()) {
-    if ((str1.size() <= 64) && (str1.size() <= 64)) {
+    if ((str1.size() <= 64) && (str2.size() <= 64)) {
       dist = getUTF8BPAEditDist<unsigned long long>(str1, str1_utf8_width, str2);
     }
     else {
