@@ -14,6 +14,7 @@ NgramQuery::NgramQuery (string &query_, int ngram_length_, bool is_pre_, bool is
   }
   else { chars_num = query.size(); }
   if (dist_threshold > 0.0) {
+    min_hit_num = (int)((double)chars_num * dist_threshold);
     ngram_length = this->tuneNgramLength(ngram_length, dist_threshold);
   }
   this->generateNgramTokens();

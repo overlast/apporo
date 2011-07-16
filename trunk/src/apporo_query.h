@@ -16,6 +16,7 @@ namespace apporo {
       bool is_utf8;
       bool is_threshold;
       int chars_num;
+      int min_hit_num;
       double dist_threshold;
       std::vector <int> utf8_boundary;
       std::set <std::string> tokens;

@@ -1,6 +1,8 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <cmath>
+#include <algorithm>
 #include "apporo_strdistance.h"
 #include "apporo_utf8.h"
 
@@ -17,28 +19,40 @@ StringDistance::StringDistance(string &dist_func_, int ngram_length_, int query_
  }
 StringDistance::~StringDistance() { return; }
 
-pair <int, int> StringDistance::getSearchThreshold(string &dist_func, int chars_num, int ngram_length, double dist_threshold) {
-  pair <int, int> threshold;
-  int min = 0;
-  int max = 0;
-  if ("edit" == dist_func) {
-    min = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) * (double)ngram_length);
-    max = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) + (double)(ngram_length - 1));
+vector < pair <int, int> > StringDistance::getSearchThreshold(string &dist_func, int chars_num, int ngram_length, double dist_threshold) {
+  vector < pair <int, int> > vec;
+  for (int i = 0; i < 256; i++) {
+    int min = 0;
+    int max = 0;
+    if (i > 0) {
+      if ("edit" == dist_func) {
+	min = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) * (double)ngram_length);
+	max = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) + (double)ngram_length);
+      }
+      else if ("dice" == dist_func) {
+	min = (int)(dist_threshold / (2.0 - dist_threshold) * (double)(chars_num + ngram_length + 1));
+	max = (int)(0.5 * dist_threshold * ((double)(chars_num + ngram_length + 1) + (double)i));
+      }
+      else if ("jaccard" == dist_func) {
+	min = (int)(dist_threshold * (double)(chars_num + ngram_length + 1));
+	max = (int)(dist_threshold * ((double)(chars_num + ngram_length + 1) + (double)i) / (1.0 + dist_threshold));
+      }
+      else if ("cosine" == dist_func) {
+	min = (int)(dist_threshold * dist_threshold * (double)(chars_num + ngram_length + 1));
+	max = (int)(dist_threshold * sqrt((double)(chars_num + ngram_length + 1) * (double)i));
+      }
+      else if ("overlap" == dist_func) {
+	min = 0;
+	max = (int)(dist_threshold * (double)std::min(chars_num + ngram_length + 1, i));
+      }
+      if (min < 0) { min = 0; }
+      if (max < 0) { max = 0; }
+      //cout << "score threshold:"<< min << "-" << max << endl;
+    }
+    pair <int, int> threshold(min, max);
+    vec.push_back(threshold);
   }
-  /*
-  else if ("dice" == dist_func) {
-  }
-  else if ("jaccard" == dist_func) {
-  }
-  else if ("cosine" == dist_func) {
-  }
-  */
-  if (min < 0) { min = 0; }
-  if (max < 0) { max = 0; }
-  //cout << "score threshold:"<< min << "-" << max << endl;
-  threshold = pair <int, int>(min, max);
-  return threshold;
-
+  return vec;
 }
 
 vector < vector <int> > StringDistance::initMatrix(int num) {
@@ -103,8 +117,8 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   if (vec1_len >= vec2_len) { s1 = str1;  s2 = str2; v1 = vec1; v2 = vec2; }
   else { s1 = str2;  s2 = str1; v1 = vec2; v2 = vec1; }
 
-  int m = s1.size();
-  int n = s2.size();
+  int m = v1.size();
+  int n = v2.size();
   
   if (m > bit_len) { m = bit_len * 8; }
   if (n > bit_len) { n = bit_len * 8; }
@@ -117,6 +131,7 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   int err = m;
   map <string, T> B; // when ASCII, string have to replace with char.
   for (int i = 0, focus = 0; i < m; focus += v1[i], i++) {
+    //cout << v1[i] << ":" << s1.substr(focus, v1[i]) << endl;
     if (B.find(s1.substr(focus, v1[i])) != B.end()) {
       B[s1.substr(focus, v1[i])] |= one << i;
     }
@@ -130,6 +145,7 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   
   for (int j = 0, focus = 0; j < n; focus += v2[j], j++) {
     T X;
+    //cout << v2[j] << ":" << s2.substr(focus, v2[j]) << endl;
     if (B.find(s2.substr(focus, v2[j])) != B.end()){ X = B[s2.substr(focus, v2[j])] | VN; }
     else { X = 0 + VN; }
     T D0 = ((VP + (X & VP)) ^ VP) | X;
@@ -170,6 +186,15 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
   T VP = 0;
   T VN = 0;
   int err = m;
+
+  /*
+  T B[256] = {0};
+  for (int i = 0; i < m; i++) {
+    B[s1[i]] |= (one << i);
+    VP |= (one << i);
+  }
+  */
+  
   map <char, T> B; // when UTF8, char have to replace with string.
   for (int i = 0; i < m; i++) {
     if (B.find(s1[i]) != B.end()) {
@@ -183,10 +208,17 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
     VP |= one << i;
   }
   
+
   for (int j = 0; j < n; j++) {
-    T X;
+    
+    T X = 0;
     if (B.find(s2[j]) != B.end()){ X = B[s2[j]] | VN; }
-    else { X = 0 + VN; }
+    else { X |=  VN; }
+    
+    /*
+    T X = B[(int)s2[j]] | VN;
+    */
+
     T D0 = ((VP + (X & VP)) ^ VP) | X;
     T HN = VP & D0;
     T HP = VN | ~(VP | D0);
@@ -233,22 +265,20 @@ double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string 
 
 double StringDistance::getStringDistance(string &str_dist, string &str1, string &str2, vector <int> &str1_utf8_width) {
   double dist = 0.0;
-  if (str_dist == "edit") {
-    if (!str1_utf8_width.empty()) {
-      if ((str1.size() <= 64) && (str1.size() <= 64)) {
-	dist = getUTF8BPAEditDist<unsigned long long>(str1, str1_utf8_width, str2);
-      }
-      else {
-	dist = getUTF8EditDist(str1, str1_utf8_width, str2);
-      }
+  if (!str1_utf8_width.empty()) {
+    if ((str1.size() <= 64) && (str1.size() <= 64)) {
+      dist = getUTF8BPAEditDist<unsigned long long>(str1, str1_utf8_width, str2);
     }
     else {
-      if ((str1.size() <= 64) && (str1.size() <= 64)) {
-	dist = getBPAEditDist<unsigned long long>(str1, str2);
-      }
-      else {
+      dist = getUTF8EditDist(str1, str1_utf8_width, str2);
+    }
+  }
+  else {
+    if ((str1.size() <= 64) && (str1.size() <= 64)) {
+      dist = getBPAEditDist<unsigned long long>(str1, str2);
+    }
+    else {
 	dist = getEditDist(str1, str2);
-      }
     }
   }
   return dist;
