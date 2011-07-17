@@ -1,12 +1,38 @@
 #ifndef APPORO_H
-#define APPORO_H
+#define APPORO_Ha
 
-#include "apporo_util.h"
-#include "apporo_search.h"
+#include <vector>
+#include <string>
+#include "apporo_config.h"
 
-void app_search_by_query(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_string, int input_string_len);
-void app_search_by_stream(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, FILE* target_file_p);
-void app_search_by_file(const char* sufarr_file_name, int ngram_num, int result_num, const char* function_name, const char* ranking_mode, const char* input_file_name);
-void app_print_usage(void);
+namespace apporo {
+  class Apporo {
+  public:
+    int ngram_length;
+    bool is_pre;
+    bool is_suf;
+    bool is_utf8;
+    double dist_threshold;
+    std::string index_path;
+    std::string dist_func;
+    int entry_buf_len;
+    std::string engine;
+    int result_num;
+    int bucket_size;
+    bool is_surface;
+    bool is_kana;
+    bool is_roman;
+    bool is_mecab;
+    bool is_juman;
+    bool is_kytea;
+
+    Apporo(std::string &file);
+    ~Apporo();
+    std::string config_file_path;
+    apporo::config::ConfigFile *config;
+    void Apporo::prepare();
+    std::vector <std::string> approximate_match(std::string &query);
+  };
+}
 
 #endif
