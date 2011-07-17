@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     string engine = "tsubomi";
     int result_num = 10;
     char param = '\0';
+    int bucket_size = result_num * 200;
     for (int i = 1; i < argc; i++) {
       if (argv[i][0] == '-') {
 	if (argv[i][1] == '\0') { continue; }
@@ -46,6 +47,7 @@ int main(int argc, char** argv) {
 	case 'e': engine = argv[i] ;break;
 	case 'b': entry_buf_len = atoi(argv[i]) ;break;
 	case 'r': result_num = atoi(argv[i]) ;break;
+	case 'B': bucket_size = atoi(argv[i]) ;break;
 	}
 	param = '\0';
       }
@@ -73,7 +75,7 @@ int main(int argc, char** argv) {
     vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist); //engine に依存
 
     // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
-    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num); //engine に依存
+    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num, bucket_size); //engine に依存
     
     // 結果を出力する
     showResult(result, nq, strdist, result_num); //engine に非依存

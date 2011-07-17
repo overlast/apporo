@@ -18,6 +18,7 @@ namespace apporo {
     }
     
     sa_index TsubomiDBSearch::binaryDIDSearch(sa_index offset, sa_index begin, sa_index end) {
+      if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
       if (begin > end) { return begin; }
       sa_index pivot = (begin + end) / 2;
       //cout << pivot << ":" << begin << ":" << end << endl;
@@ -25,11 +26,13 @@ namespace apporo {
       //cout << ret << endl;
       if (ret < 0) { return binaryDIDSearch(offset, begin, pivot - 1);  }
       else if (ret > 0) { return binaryDIDSearch(offset, pivot + 1, end);  }
+      id_cache[offset] = pivot;
       return pivot;
     }
 
     sa_index TsubomiDBSearch::getDID(sa_index num) {
       sa_index offset = mr_sa_[num];
+      if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
       return binaryDIDSearch(offset, 0, mr_did_.size() - 1);
     }
 
