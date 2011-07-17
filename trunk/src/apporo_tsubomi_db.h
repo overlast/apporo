@@ -8,7 +8,6 @@
 
 namespace apporo {
   namespace strage {
-    using namespace std;
     
     typedef int                           sa_index;
     typedef std::pair<sa_index, sa_index> sa_range;
@@ -26,8 +25,9 @@ namespace apporo {
 
     class TsubomiDBSearch : public tsubomi::basic_searcher {
     public:
-      TsubomiDBSearch(string &filename);
+      TsubomiDBSearch(std::string &filename);
       ~TsubomiDBSearch();
+      std::map <int, int> id_cache;
       sa_index getDID(sa_index num);
       sa_index binaryDIDSearch(sa_index offset, sa_index begin, sa_index end);
     protected:
@@ -42,9 +42,9 @@ namespace apporo {
     
     class TsubomiDBIndex : public tsubomi::indexer  {
     public:
-      TsubomiDBIndex(string &filename);
+      TsubomiDBIndex(std::string &filename);
       ~TsubomiDBIndex();
-      void makeDIDIndex(string &boundary);
+      void makeDIDIndex(std::string &boundary);
       void mkary_make(std::vector<sa_index> &sa, const char *seps, bool is_utf8);
     };
   }
