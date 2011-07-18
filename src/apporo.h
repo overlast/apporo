@@ -30,7 +30,7 @@ namespace apporo {
     ~Apporo();
     std::string config_file_path;
     apporo::config::ConfigFile *config;
-    void Apporo::prepare();
+    void prepare();
     std::vector <std::string> approximate_match(std::string &query);
   };
 }
