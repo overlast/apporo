@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <iostream>
 #include <sstream>
 #include "apporo.h"
 #include "apporo_util.h"

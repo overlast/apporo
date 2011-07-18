@@ -55,6 +55,7 @@ endif
 	cp apporo_indexer $(BIN)
 	cp apporo_searcher $(BIN)
 	cp apporo_*.h $(INC)
+	cp apporo.h $(INC)
 
 uninstall:
 	- rm -f $(LIB)libapporo.so
@@ -64,4 +65,5 @@ uninstall:
 	- rm -f $(BIN)apporo_indexer
 	- rm -f $(BIN)apporo_searcher
 	- rm -f $(INC)apporo_*.h
+	- rm -f $(INC)apporo.h
 

@@ -25,6 +25,8 @@ libapporo.so.1.0: $(SRC) $(HDR)
 	$(CC) -O2 -Wall -fPIC -g -c apporo_search.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_index.cc
 	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
+	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
+	ar rcs libapporo.a apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o
 
 clean:
 	- rm apporo
@@ -40,9 +42,11 @@ clean:
 	- rm -f apporo_indexer
 	- rm -f apporo_searcher
 	- rm -f libapporo.so.1.0
+	- rm -f libapporo.a
 
 install:
 	cp libapporo.so.1.0 $(LIB)
+	cp libapporo.a $(LIB)
 ifeq ($(UNAME), Linux)
 #	/sbin/ldconfig -n $(LIB)
 	ln -fs $(LIB)libapporo.so.1 $(LIB)libapporo.so
@@ -55,13 +59,16 @@ endif
 	cp apporo_indexer $(BIN)
 	cp apporo_searcher $(BIN)
 	cp apporo_*.h $(INC)
+	cp apporo.h $(INC)
 
 uninstall:
 	- rm -f $(LIB)libapporo.so
 	- rm -f $(LIB)libapporo.so.1
 	- rm -f $(LIB)libapporo.so.1.0
+	- rm -f $(LIB)libapporo.a
 	- rm -f $(BIN)apporo
 	- rm -f $(BIN)apporo_indexer
 	- rm -f $(BIN)apporo_searcher
 	- rm -f $(INC)apporo_*.h
+	- rm -f $(INC)apporo.h
 
