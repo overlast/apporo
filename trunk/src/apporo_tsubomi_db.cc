@@ -3,6 +3,7 @@
 #include "tsubomi_mmap.h"
 #include "apporo_tsubomi_db.h"
 
+#include <cstdio>
 #include <iostream>
 #include <string>
 
