@@ -19,8 +19,8 @@ namespace apporo {
       std::vector < std::vector <int> > initMatrix(int num);
       double getEditDist(std::string &str1, std::string &str2);
       double getUTF8EditDist(std::string &str1, std::vector <int> &vec1, std::string &str2);
-      template <typename T> double StringDistance::getBPAEditDist(std::string &str1, std::string &str2);
-      template <typename T> double StringDistance::getUTF8BPAEditDist(std::string &str1, std::vector <int> &vec1, std::string &str2);
+      template <typename T> double getBPAEditDist(std::string &str1, std::string &str2);
+      template <typename T> double getUTF8BPAEditDist(std::string &str1, std::vector <int> &vec1, std::string &str2);
       double getStringDistance(std::string &str_dist, std::string &str1, std::string &str2, std::vector <int> &str1_utf8_width);
     };
   }
