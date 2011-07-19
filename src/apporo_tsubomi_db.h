@@ -28,8 +28,8 @@ namespace apporo {
       TsubomiDBSearch(std::string &filename);
       ~TsubomiDBSearch();
       std::map <int, int> id_cache;
-      sa_index getDID(sa_index num);
-      sa_index binaryDIDSearch(sa_index offset, sa_index begin, sa_index end);
+      sa_index getDID(sa_index &num);
+      sa_index binaryDIDSearch(sa_index &offset, sa_index begin, sa_index end);
     protected:
       tsubomi::mmap_reader<sa_index> mr_did_;
     };

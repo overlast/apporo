@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <cmath>
 
 namespace apporo {
   namespace strage {
@@ -18,8 +19,7 @@ namespace apporo {
       return;
     }
     
-    sa_index TsubomiDBSearch::binaryDIDSearch(sa_index offset, sa_index begin, sa_index end) {
-      if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
+    sa_index TsubomiDBSearch::binaryDIDSearch(sa_index &offset, sa_index begin, sa_index end) {
       if (begin > end) { return begin; }
       sa_index pivot = (begin + end) / 2;
       //cout << pivot << ":" << begin << ":" << end << endl;
@@ -27,14 +27,15 @@ namespace apporo {
       //cout << ret << endl;
       if (ret < 0) { return binaryDIDSearch(offset, begin, pivot - 1);  }
       else if (ret > 0) { return binaryDIDSearch(offset, pivot + 1, end);  }
-      id_cache[offset] = pivot;
       return pivot;
     }
 
-    sa_index TsubomiDBSearch::getDID(sa_index num) {
+    sa_index TsubomiDBSearch::getDID(sa_index &num) {
       sa_index offset = mr_sa_[num];
-      if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
-      return binaryDIDSearch(offset, 0, mr_did_.size() - 1);
+      //if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
+      sa_index pivot = binaryDIDSearch(offset, 0, mr_did_.size() - 1);
+      //id_cache[offset] = pivot;
+      return pivot;
     }
 
     TsubomiDBWrite::TsubomiDBWrite(FILE *fout)
@@ -54,9 +55,14 @@ namespace apporo {
     }
 
     void TsubomiDBIndex::makeDIDIndex(string &boundary) {
+      bool is_progress = true;
       string did_path = (string)filename_ + ".did";
       vector <sa_index> did;
+      int N = mr_file_.size();
+      tsubomi::progress_bar prg(int(N / 40));
+      if (is_progress) { cerr << "+--------------------------------------+" << endl; }
       for (sa_index offset = 0; offset < mr_file_.size(); offset++) {
+	if (is_progress) { prg.progress(1); }
 	int b_size = boundary.size();
 	for (int i = 0; i < b_size; i++) {
 	  if (mr_file_[offset] == boundary[i]) {
@@ -73,6 +79,7 @@ namespace apporo {
       TsubomiDBWrite writer(fout);
       writer.write(did);
       fclose(fout);
+      if (is_progress) {  cout << endl << "done!" << endl; }
       return;
     }
     
@@ -80,7 +87,6 @@ namespace apporo {
       // read index from file
       if (is_utf8) {
 	if (seps[0] == '\t') {
-	  cout << "u+t" << endl;
 	  bool flg = true;
 	  for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
 	    if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
@@ -103,7 +109,6 @@ namespace apporo {
 	}
       } else if (seps[0] == '\t') {
 	bool flg = true;
-	cout << "t" << endl;
 	for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
 	  if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
 	  else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }

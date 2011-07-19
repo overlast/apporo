@@ -27,7 +27,7 @@ int main (int argc, char** argv) {
     bool is_did = false;
     bool is_utf8 = false;
     bool is_help         = false;
-    bool is_progress     = false;
+    bool is_progress     = true;
     bool is_makeonly     = false;
     bool is_sortonly     = false;
     for (int i = 1; i < argc; i++) {
