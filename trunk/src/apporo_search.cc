@@ -39,70 +39,38 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
   map <sa_index, int> id_map;
   int id_map_count = id_map.size();
   if (nq->dist_threshold > 0.0) {
-    //cout << "deb" << ngram_que_count << ":" << strdist->search_threshold[nq->min_hit_num].first << ":" << strdist->search_threshold[nq->min_hit_num].second << endl;
     ngram_que_limit -= strdist->search_threshold[nq->min_hit_num].first;
   }
   for (vector < pair<string, sa_range> >::iterator it = range_vector.begin(); it != range_vector.end(); it++) {
-    //while (!ngram_que.empty()) {
     pair <string, sa_range> item = (*it);
-    //ngram_que.pop();
-    string query_str = item.first;
-    sa_range p = item.second;
-    //cout << query_str << ":" << p.second - p.first << ":" << p.first << ":" << p.second << endl;
-    for (sa_index i = p.first; i <= p.second; i++) {
+    //string query_str = item.first;
+    //sa_range p = item.second;
+    for (sa_index i = (item.second).first; i <= (item.second).second; i++) {
       sa_index id = tdb->getDID(i);
-      //cout << query_str << ":" << id << endl;
       if ((nq->dist_threshold > 0.0) && (ngram_que_limit <= 0)) {
-	//cout << "check" << endl;
 	if (id_map.find(id) != id_map.end()) {
 	  if (id_map[id] + ngram_que_count < strdist->search_threshold[nq->min_hit_num].first) {
-	    //cout << "cut-erase:" << id << ":" << id_map[id] << ":" << ngram_que_count << endl;
 	    id_map.erase(id);
 	    continue;
 	  }
 	}
-	else if (ngram_que_count < strdist->search_threshold[nq->min_hit_num].first) {
-	  //cout << "cut" << id << endl;
-	  continue;
-	}
+	else if (ngram_que_count < strdist->search_threshold[nq->min_hit_num].first) { continue; }
       }
       id_map[id]++;
-      //cout << "hit" << id << ":" << id_map[id] << endl;
-      if (id_index_map.find(id) != id_index_map.end()) {
-	/*
-	  sa_index pos;
-	  int num = 1024;
-	  char tmp_buf[num];
-	  tdb->get_line(i, tmp_buf, num, &pos);
-	  cout << "cached" << id  << ":" <<  i << ":pos:" << pos << endl;
-	  cout << tmp_buf << endl;
-	*/
-      }
-      else { 
-	id_index_map[id] = i;
-	/*
-	sa_index pos;
-	  int num = 1024;
-	  char tmp_buf[num];
-	  tdb->get_line(id_index_map[id], tmp_buf, num, &pos);
-	  cout << "cache" << id << ":" << id_index_map[id] << ":" <<  i << endl;
-	  cout << tmp_buf << endl;
-	*/
-      }
+      if (id_index_map.find(id) != id_index_map.end()) {}
+      else { id_index_map[id] = i; }
     }
     ngram_que_count--;
     ngram_que_limit--;
-    if ((nq->dist_threshold > 0.0) && (ngram_que_limit <= 0) && (id_map_count == (int)id_map.size())) { break; }
-    id_map_count = id_map.size();
+    if (nq->dist_threshold > 0.0) {
+      if ((ngram_que_limit <= 0) && (id_map_count == (int)id_map.size())) { break; }
+      else { id_map_count = id_map.size(); }
+    }
   }
 
-  //priority_queue< pair<sa_index, int>, vector< pair<sa_index, int> >, pair_second_low_order> que;
   for ( map <sa_index, int>::iterator i = id_map.begin(); i != id_map.end(); i++ ) {
     if ((nq->dist_threshold > 0.0) && (strdist->search_threshold[nq->min_hit_num].second > 0))  {
-      if ((*i).second < strdist->search_threshold[nq->min_hit_num].second) {
-	//cout << "cut:" << (*i).first << ":" << (*i).second << ":" << strdist->search_threshold[nq->min_hit_num].second  << endl;
-	continue;
-      }
+      if ((*i).second < strdist->search_threshold[nq->min_hit_num].second) {continue; }
     }
     id_freq_vec.push_back(*i);
     //cout << (*i).first << ":" << (*i).second << endl;
@@ -129,11 +97,6 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
     //cout << entry_str << endl;
     double dist = strdist->getStringDistance(strdist->dist_func, nq->query, entry_str, nq->utf8_boundary);
     if (dist > 0.0) {
-      /*
-      if (tmp_buf[0] != '\0') {
-	cout << tmp_buf << ":"  << entry_str  << ":" << dist << endl;
-      }
-      */
       result.push_back(pair<double, string>(dist, (string)(tmp_buf[0] != '\0' ? tmp_buf : "")));
       push_count++; // 足して良い時と悪い時がある
     }
