@@ -5,6 +5,7 @@
 #include "tsubomi_indexer.h"
 #include "tsubomi_mmap.h"
 #include <string>
+#include <tr1/unordered_map>
 
 namespace apporo {
   namespace strage {
@@ -27,7 +28,7 @@ namespace apporo {
     public:
       TsubomiDBSearch(std::string &filename);
       ~TsubomiDBSearch();
-      std::map <int, int> id_cache;
+      std::tr1::unordered_map <int, int> id_cache;
       sa_index getDID(sa_index &num);
       sa_index binaryDIDSearch(sa_index &offset, sa_index begin, sa_index end);
     protected:

@@ -6,7 +6,6 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
-#include <cmath>
 
 namespace apporo {
   namespace strage {
@@ -34,7 +33,7 @@ namespace apporo {
       sa_index offset = mr_sa_[num];
       //if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
       sa_index pivot = binaryDIDSearch(offset, 0, mr_did_.size() - 1);
-      //id_cache[offset] = pivot;
+      //if (id_cache.find(offset) == id_cache.end()) { id_cache[offset] = pivot; }
       return pivot;
     }
 
