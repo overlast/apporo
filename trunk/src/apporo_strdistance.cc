@@ -202,7 +202,7 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
   }
   */
   
-  tr1::unordered_map <char, T> B; // when UTF8, char have to replace with string.
+  map <char, T> B; // when UTF8, char have to replace with string.
   for (int i = 0; i < m; i++) {
     if (B.find(s1[i]) != B.end()) {
       B[s1[i]] |= one << i;
