@@ -33,7 +33,7 @@ namespace apporo {
       sa_index offset = mr_sa_[num];
       //if (id_cache.find(offset) != id_cache.end()) { return id_cache[offset]; }
       sa_index pivot = binaryDIDSearch(offset, 0, mr_did_.size() - 1);
-      //if (id_cache.find(offset) == id_cache.end()) { id_cache[offset] = pivot; }
+      //id_cache[offset] = pivot;
       return pivot;
     }
 
