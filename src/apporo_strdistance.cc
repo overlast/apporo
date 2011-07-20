@@ -1,6 +1,5 @@
 #include <string>
-//#include <map>
-#include <tr1/unordered_map>
+#include <map>
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -134,7 +133,7 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   T VP = 0;
   T VN = 0;
   int err = m;
-  tr1::unordered_map <string, T> B; // when ASCII, string have to replace with char.
+  map <string, T> B; // when ASCII, string have to replace with char.
   for (int i = 0, focus = 0; i < m; focus += v1[i], i++) {
     //if (focus + v1[i] >= (int)s1.size()) {break;}
     //cout << v1[i] << ":" << s1.substr(focus, v1[i]) << ":" << s1 << ":"<< i << ":" << m<< endl;
