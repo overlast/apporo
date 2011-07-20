@@ -24,11 +24,13 @@ libapporo.so.1.0: $(SRC) $(HDR)
 	$(CC) -O2 -Wall -fPIC -g -c apporo_strdistance.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_search.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_index.cc
+
 ifeq ($(UNAME), Darwin)
 	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
 else
 	$(CC) -O2 -Wall -g -shared -Wl,-soname,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
 endif
+
 	ar rcs libapporo.a apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o
 
 clean:
