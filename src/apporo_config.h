@@ -2,7 +2,7 @@
 #define APPORO_CONFIG_H
 
 #include <string>
-#include <map>
+#include <tr1/unordered_map>
 #include <sstream>
 
 
@@ -11,7 +11,7 @@ namespace apporo {
     class ConfigFile {
     public:
       std::string file_path;
-      std::map <std::string, std::string> conf;
+      std::tr1::unordered_map <std::string, std::string> conf;
       ConfigFile(std::string &file_path_);
       ~ConfigFile();
       void readConfig();
