@@ -5,6 +5,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <fstream>
 #include <string>
 
 namespace apporo {
@@ -17,16 +18,21 @@ namespace apporo {
     TsubomiDBSearch::~TsubomiDBSearch() {
       return;
     }
-    
+
     sa_index TsubomiDBSearch::binaryDIDSearch(sa_index &offset, sa_index begin, sa_index end) {
-      if (begin > end) { return begin; }
-      sa_index pivot = (begin + end) / 2;
-      //cout << pivot << ":" << begin << ":" << end << endl;
-      int ret = offset - mr_did_[pivot];
-      //cout << ret << endl;
-      if (ret < 0) { return binaryDIDSearch(offset, begin, pivot - 1);  }
-      else if (ret > 0) { return binaryDIDSearch(offset, pivot + 1, end);  }
-      return pivot;
+      sa_index res = -1;
+      while (begin <= end) {
+	sa_index pivot = (begin + end) / 2;
+	//cout << pivot << ":" << begin << ":" << end << endl;
+	int ret = offset - mr_did_[pivot];
+	//cout << ret << endl;
+	if (ret < 0) { end =  pivot - 1; }
+	else if (ret > 0) { begin = pivot + 1; }
+	else { res = pivot; break; }
+      }
+      if (begin > end) { res = begin; }
+      //cout << res << endl;
+      return res;
     }
 
     sa_index TsubomiDBSearch::getDID(sa_index &num) {
