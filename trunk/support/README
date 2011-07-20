@@ -1,6 +1,20 @@
 ----
 2011/07/20
 
+If you use Mac OS X, maybe you can't install tsubomi.
+Because tsubomi's Makefile are not compatible with Mac OS X.
+
+So, please replace "apporo/support/tsubomi/Makefile" and "tsubomi/Makefile".
+
+$ mv tsubomi-read-only/Makefile tsubomi-read-only/Makefile.org
+$ cp apporo/support/tsubomi/Makefile tsubomi-read-only/
+
+I will feedback this problem to @echizen_tm.
+It will got to be alright.
+
+----
+2011/07/20
+
 If you get the following message, it is bug of hashtable of MacOSX's gcc.
 
 > /usr/include/c++/4.0.0/tr1/hashtable: In member function 'typename std::tr1::hashtable<Key, Value, Allocator, ExtractKey, Equal, H1, H2, H, RehashPolicy, cache_hash_code, mutable_iterators, unique_keys>::size_type std::tr1::hashtable<Key, Value, Allocator, ExtractKey, Equal, H1, H2, H, RehashPolicy, cache_hash_code, mutable_iterators, unique_keys>::erase(const Key&) [with Key = int, Value = std::pair<const int, int>, Allocator = std::allocator<std::pair<const int, int> >, ExtractKey = Internal::extract1st<std::pair<const int, int> >, Equal = std::equal_to<int>, H1 = std::tr1::hash<int>, H2 = Internal::mod_range_hashing, H = Internal::default_ranged_hash, RehashPolicy = Internal::prime_rehash_policy, bool cache_hash_code = false, bool mutable_iterators = true, bool unique_keys = true]':
