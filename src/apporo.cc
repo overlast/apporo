@@ -78,7 +78,9 @@ vector <string> Apporo::approximate_match(string &query) {
   vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq);
   map <sa_index, sa_index> id_index_map;
   vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist);
+  //vector < pair< pair <sa_index, int>, sa_index > > id_freq_ind_vec = ngram_searcher->getIDMap(range_vector, nq, strdist);
   vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num, bucket_size);
+  //vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_ind_vec, nq, strdist, result_num, bucket_size);
   for (int i = 0; i < (int)result.size(); i++) {
     std::stringstream ss;
     string tmp;
