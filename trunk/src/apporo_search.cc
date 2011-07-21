@@ -139,13 +139,17 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       //cout << (*i).first << ":" << (*i).second << endl;
     }
     if (count > 0) {
+      /*
       bool is_next = false;
       if (strdist->search_threshold[nq->min_hit_num].second > 0)  {
 	if (count < strdist->search_threshold[nq->min_hit_num].second) { is_next = true; }
       }
       if (!is_next) {
-	tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
+      */
+      tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
+      /*
       }
+      */
       count = 0;
     }
     id_freq_vec = tmp_id_freq_vec;
