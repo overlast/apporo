@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     bool is_utf8 = false;
     double dist_threshold = 0.0;
     string index_path = "";
-    string dist_func = "edit";
+    string dist_func = "dice";
     int entry_buf_len = 1024;
     string engine = "tsubomi";
     int result_num = 10;

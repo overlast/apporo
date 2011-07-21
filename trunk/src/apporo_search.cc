@@ -194,4 +194,3 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
   sort(result.begin(), result.end(), pair_first_low_order());
   return result;
 }
-
