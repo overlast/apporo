@@ -1,16 +1,11 @@
 ----
 2011/07/20
 
-If you use Mac OS X, maybe you can't install tsubomi.
+If you use Mac OS X, maybe you couldn't install tsubomi.
 Because tsubomi's Makefile are not compatible with Mac OS X.
-
-So, please replace "apporo/support/tsubomi/Makefile" and "tsubomi/Makefile".
-
-$ mv tsubomi-read-only/Makefile tsubomi-read-only/Makefile.org
-$ cp apporo/support/tsubomi/Makefile tsubomi-read-only/
-
-I will feedback this problem to @echizen_tm.
-It will got to be alright.
+I will feedbacked this problem to @echizen_tm.
+It got to be alright.
+tsubomi has no problem.
 
 ----
 2011/07/20
