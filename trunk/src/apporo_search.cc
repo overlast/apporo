@@ -68,7 +68,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
       count = 0;
     }
-
+    
     if (nq->dist_threshold > 0.0) {
       //cout << ngram_que_limit << endl;
       if (ngram_que_limit <= 0) {
@@ -109,7 +109,13 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     sa_index prev_id = id_freq_vec[0].first;
     for (vector < pair <sa_index, int> >::iterator idit = id_freq_vec.begin(); idit != id_freq_vec.end(); idit++) {
       if (prev_id != (*idit).first) {
-	tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
+	bool is_next = false;
+	if (strdist->search_threshold[nq->min_hit_num].second > 0)  {
+	  if (count > strdist->search_threshold[nq->min_hit_num].second) { is_next = true; }
+	}
+	if (!is_next) {
+	  tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
+	}
 	count = (*idit).second;
 	prev_id = (*idit).first;
       }
@@ -117,7 +123,13 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       //cout << (*i).first << ":" << (*i).second << endl;
     }
     if (count > 0) {
-      tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
+      bool is_next = false;
+      if (strdist->search_threshold[nq->min_hit_num].second > 0)  {
+      	if (count > strdist->search_threshold[nq->min_hit_num].second) { is_next = true; }
+      }
+      if (!is_next) {
+	tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
+      }
       count = 0;
     }
     id_freq_vec = tmp_id_freq_vec;
@@ -141,9 +153,9 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       count = 0;
     }
     id_freq_vec = tmp_id_freq_vec;
+
   }
   //cout << id_freq_vec.size() << endl;
-
   sort(id_index_vec.begin(), id_index_vec.end(), pair_first_up_order());
   sa_index tmp_sa_index = id_index_vec[0].first;
   sa_index tmp_id = id_index_vec[0].second;
@@ -154,7 +166,6 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       tmp_id = (*it).second;
     }
   }
-
   sort(id_freq_vec.begin(), id_freq_vec.end(), pair_second_low_order());
   return id_freq_vec;
 }
@@ -170,6 +181,7 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
     tmp_buf[0] = '\0';
     sa_index pos;
     this->tdb->get_line(id_index_map[item.first], tmp_buf, entry_buf_len, &pos);
+    //cout << "id:" << item.first << ":" << id_index_map[item.first] << "pos:"<< pos <<endl;
     //cout << tmp_buf << endl;
     string entry_str = getFirstColumn(tmp_buf, '\t');
     //cout << entry_str << endl;
