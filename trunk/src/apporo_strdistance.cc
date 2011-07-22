@@ -137,13 +137,14 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   for (int i = 0, focus = 0; i < m; focus += v1[i], i++) {
     //if (focus + v1[i] >= (int)s1.size()) {break;}
     //cout << v1[i] << ":" << s1.substr(focus, v1[i]) << ":" << s1 << ":"<< i << ":" << m<< endl;
-    if (B.find(s1.substr(focus, v1[i])) != B.end()) {
-      B[s1.substr(focus, v1[i])] |= one << i;
+    string s1v1 = s1.substr(focus, v1[i]);
+    if (B.find(s1v1) != B.end()) {
+      B[s1v1] |= one << i;
     }
     else {
       T tmp = 0;
       tmp |= one << i;
-      B[s1.substr(focus, v1[i])] = tmp;
+      B[s1v1] = tmp;
     }
     VP |= one << i;
   }
@@ -152,7 +153,8 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
     T X;
     //cout << v2[j] << ":" << s2.substr(focus, v2[j]) << endl;
     //if (focus + v2[j] >= (int)s2.size()) {break;}
-    if (B.find(s2.substr(focus, v2[j])) != B.end()){ X = B[s2.substr(focus, v2[j])] | VN; }
+    string s2v2 = s2.substr(focus, v2[j]);
+    if (B.find(s2v2) != B.end()){ X = B[s2v2] | VN; }
     else { X = 0 + VN; }
     T D0 = ((VP + (X & VP)) ^ VP) | X;
     T HN = VP & D0;
@@ -254,7 +256,8 @@ double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string 
   vector < vector <int> > matrix = initMatrix(matrix_width);
   for (int i = 0, focus1 = 0; i < vec1_len; focus1 += vec1[i], i++) {
     for (int j = 0, focus2 = 0; j < vec2_len; focus2 += vec2[j], j++) {
-      if ((vec1[i] == vec2[j]) && (str1.substr(focus1, vec1[i]) == str2.substr(focus2, vec2[j]))) {
+      //if ((vec1[i] == vec2[j]) && (str1.substr(focus1, vec1[i]) == str2.substr(focus2, vec2[j]))) {
+      if ((vec1[i] == vec2[j]) && (0 == str1.compare(focus1, vec1[i], str2, focus2, vec2[j]))) {
 	matrix[i + 1][j + 1] = matrix[i][j];
       }
       else {
