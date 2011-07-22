@@ -27,6 +27,16 @@ namespace apporo {
       std::vector < std::pair <double, std::string> > matchApproximately(std::string engine, std::string index_path);
       std::vector < std::pair <double, std::string> > rerankAndGetResult(std::vector <std::pair <apporo::strage::sa_index, int> > &id_freq_vec, std::map <apporo::strage::sa_index, apporo::strage::sa_index> &id_index_map, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist, int result_num = 0, int bucket_size = 2000);
     };
+
+    class DeleteID {
+    public:
+      int threshold;
+      bool operator()(std::pair <apporo::strage::sa_index, int> &x) const {
+	return x.second > threshold;
+      }
+      DeleteID(int num);
+      ~DeleteID();
+    };
   }
 }
 

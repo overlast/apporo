@@ -8,6 +8,9 @@ using namespace apporo::util;
 using namespace apporo::search;
 using namespace apporo::query;
 
+DeleteID::DeleteID(int num){ threshold = num; return; }
+DeleteID::~DeleteID() { return; }
+
 NgramSearch::NgramSearch (string &engine_, string &index_path_, int entry_buf_len_) 
   : engine(engine_), index_path(index_path_), entry_buf_len(entry_buf_len_) {
   if (engine == "tsubomi") {
@@ -103,36 +106,8 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
   }
 
   if (nq->dist_threshold > 0.0) {
-    sort(id_freq_vec.begin(), id_freq_vec.end(), pair_first_up_order());
-    vector < pair <sa_index, int> > tmp_id_freq_vec;
-    int count = 0;
-    sa_index prev_id = id_freq_vec[0].first;
-    for (vector < pair <sa_index, int> >::iterator idit = id_freq_vec.begin(); idit != id_freq_vec.end(); idit++) {
-      if (prev_id != (*idit).first) {
-	bool is_next = false;
-	if (strdist->search_threshold[nq->min_hit_num].second > 0)  {
-	  if (count > strdist->search_threshold[nq->min_hit_num].second) { is_next = true; }
-	}
-	if (!is_next) {
-	  tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
-	}
-	count = (*idit).second;
-	prev_id = (*idit).first;
-      }
-      else { count += (*idit).second; }
-      //cout << (*i).first << ":" << (*i).second << endl;
-    }
-    if (count > 0) {
-      bool is_next = false;
-      if (strdist->search_threshold[nq->min_hit_num].second > 0)  {
-      	if (count > strdist->search_threshold[nq->min_hit_num].second) { is_next = true; }
-      }
-      if (!is_next) {
-	tmp_id_freq_vec.push_back(pair<sa_index, int>(prev_id, count));
-      }
-      count = 0;
-    }
-    id_freq_vec = tmp_id_freq_vec;
+    vector< pair <sa_index, int> >::iterator delete_id = remove_if(id_freq_vec.begin(), id_freq_vec.end(), DeleteID(strdist->search_threshold[nq->min_hit_num].second));
+    id_freq_vec.erase( delete_id, id_freq_vec.end() );
   }
   else {
     sort(id_freq_vec.begin(), id_freq_vec.end(), pair_first_up_order());
