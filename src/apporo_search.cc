@@ -22,7 +22,7 @@ NgramSearch::~NgramSearch () { return; }
 
 vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
   vector < pair<string, sa_range> > ngram_vector;
-  for (set <string>::iterator it = nq->tokens.begin(); it != nq->tokens.end(); it++) {
+  for (set <string>::iterator it = nq->tokens.begin(); it != nq->tokens.end(); ++it) {
     string query_str = *it;
     sa_range p = this->tdb->search(query_str.c_str());
     //cout << query_str  << ":" << p.first << ":" << p.second << endl;
@@ -49,7 +49,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     ngram_que_limit -= strdist->search_threshold[nq->min_hit_num].first;
     vector <sa_index> tmp_id_bucket;
     vector <sa_index> &id_bucket = tmp_id_bucket;
-    for (vector < pair<string, sa_range> >::iterator it = range_vector.begin(), eit = range_vector.end(); it != eit; it++) {
+    for (vector < pair<string, sa_range> >::iterator it = range_vector.begin(), eit = range_vector.end(); it != eit; ++it) {
       pair <string, sa_range> item = (*it);
       prev_id = -1;
       for (sa_index i = (item.second).first, e = (item.second).second; i <= e; i++) {
@@ -66,7 +66,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
 	sort(id_bucket.begin(), id_bucket.end());
 	count = 0;
 	sa_index *prev_id_p = &id_bucket[0];
-	for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; idit++) {
+	for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; ++idit) {
 	  if (*prev_id_p != *idit) {
 	    id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count));
 	    count = 1;
@@ -86,7 +86,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
 	vector < pair <sa_index, int> > tmp_id_freq_vec;
 	count = 0;
 	prev_id_p = &(id_freq_vec[0].first);
-	for (vector < pair <sa_index, int> >::iterator idit = id_freq_vec.begin(), ideit = id_freq_vec.end(); idit != ideit; idit++) {
+	for (vector < pair <sa_index, int> >::iterator idit = id_freq_vec.begin(), ideit = id_freq_vec.end(); idit != ideit; ++idit) {
 	  if (*prev_id_p != (*idit).first) {
 	    if (count + ngram_que_count < strdist->search_threshold[nq->min_hit_num].first) {}
 	    else { tmp_id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count)); }
@@ -119,7 +119,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       sort(id_bucket.begin(), id_bucket.end());
       count = 0;
       sa_index *prev_id_p = &(id_bucket[0]);
-      for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; idit++) {
+      for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; ++idit) {
 	if (*prev_id_p != *idit) {
 	  id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count));
 	  count = 1;
@@ -141,7 +141,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
   }
   else {
     vector <sa_index> id_bucket;
-    for (vector < pair<string, sa_range> >::iterator it = range_vector.begin(), eit = range_vector.end(); it != eit; it++) {
+    for (vector < pair<string, sa_range> >::iterator it = range_vector.begin(), eit = range_vector.end(); it != eit; ++it) {
       pair <string, sa_range> item = (*it);
       count = 0;
       prev_id = -1;
@@ -158,7 +158,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     sort(id_bucket.begin(), id_bucket.end());
     count = 0;
     sa_index *prev_id_p = &id_bucket[0];
-    for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; idit++) {
+    for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; ++idit) {
       if (*prev_id_p != *idit) {
 	id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count));
 	count = 1;
@@ -179,7 +179,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
   sa_index *tmp_sa_index = &(id_index_vec[0].first);
   sa_index *tmp_id = &(id_index_vec[0].second);
   //cout << "make map" << endl;
-  for (vector < pair <sa_index, sa_index> >::iterator it = id_index_vec.begin(), eit = id_index_vec.end(); it != eit; it++) {
+  for (vector < pair <sa_index, sa_index> >::iterator it = id_index_vec.begin(), eit = id_index_vec.end(); it != eit; ++it) {
     if (*tmp_sa_index != (*it).first) {
       id_index_map[*tmp_sa_index] = *tmp_id;
       tmp_sa_index = &((*it).first);
@@ -196,7 +196,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
 vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <sa_index, int> > &id_freq_vec, map <sa_index, sa_index> &id_index_map, NgramQuery *nq, StringDistance *strdist, int result_num, int bucket_size) {
   int push_count = 0;
   vector < pair <double, string> > result;
-  for (vector <pair <sa_index, int> >::iterator it = id_freq_vec.begin(), eit = id_freq_vec.end(); it != eit; it++) {
+  for (vector <pair <sa_index, int> >::iterator it = id_freq_vec.begin(), eit = id_freq_vec.end(); it != eit; ++it) {
     if ((result_num > 0) && (push_count == bucket_size)) { break; } // どうする
     pair <sa_index, int> item = *it;
     //cout << item.first << '/' << item.second << endl;
