@@ -18,7 +18,10 @@ NgramSearch::NgramSearch (string &engine_, string &index_path_, int entry_buf_le
   }
   return;
 }
-NgramSearch::~NgramSearch () { return; }
+NgramSearch::~NgramSearch () { 
+  delete tdb;
+  return;
+}
 
 vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
   vector < pair<string, sa_range> > ngram_vector;
