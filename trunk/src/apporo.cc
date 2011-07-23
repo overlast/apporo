@@ -26,8 +26,10 @@ Apporo::Apporo(string &config_file_path_)
   return;
 }
 
-Apporo::~Apporo() { return; }
-
+Apporo::~Apporo() { 
+  delete config;
+  return;
+}
 
 void Apporo::prepare() {
   
@@ -71,6 +73,7 @@ void Apporo::prepare() {
 }
 
 vector <string> Apporo::approximate_match(string &query) {
+  cout << query << endl;
   vector <string> res;
   NgramQuery *nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
   StringDistance *strdist = new StringDistance(dist_func, ngram_length, nq->chars_num, dist_threshold);
@@ -79,6 +82,7 @@ vector <string> Apporo::approximate_match(string &query) {
   map <sa_index, sa_index> id_index_map;
   vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist);
   vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num, bucket_size);
+
   for (int i = 0; i < (int)result.size(); i++) {
     std::stringstream ss;
     string tmp;
@@ -88,6 +92,11 @@ vector <string> Apporo::approximate_match(string &query) {
     res.push_back(tmp);
     if (i >= result_num) { break; }
   }
+
+  delete ngram_searcher;
+  delete strdist;
+  delete nq;
+
   return res;
 }
 

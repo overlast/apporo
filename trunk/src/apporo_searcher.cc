@@ -79,7 +79,11 @@ int main(int argc, char** argv) {
     
     // 結果を出力する
     showResult(result, nq, strdist, result_num); //engine に非依存
-
+    
+    delete ngram_searcher;
+    delete strdist;
+    delete nq;
+  
   } catch (const char *err) {
     cerr << err << endl;
     res = 1;
