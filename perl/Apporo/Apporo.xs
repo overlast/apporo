@@ -48,7 +48,7 @@ Apporo::approximate_match(char* query)
 CODE:
   AV *res = newAV();
   string q(query);
-  vector <string> vec = THIS->approximate_match(q);
+  vector <string> vec = THIS->approximateMatch(q);
   av_extend(res, vec.size() - 1);
   for (size_t i = 0; i < vec.size(); i++) {
     SV *tmp = newSVpv(vec[i].c_str(), 0);
