@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-  void* apporo_c_new(char*);
-  void apporo_c_delete(void*);
-  char** apporo_c_approximate_match(void*, char*);
+  void* app_c_new(char*);
+  void app_c_delete(void*);
+  char** app_c_approximate_match(void*, char*);
 
 #ifdef __cplusplus
 }
