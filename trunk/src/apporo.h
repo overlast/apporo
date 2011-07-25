@@ -31,7 +31,7 @@ namespace apporo {
     std::string config_file_path;
     apporo::config::ConfigFile *config;
     void prepare();
-    std::vector <std::string> approximate_match(std::string &query);
+    std::vector <std::string> approximateMatch(std::string &query);
   };
 }
 

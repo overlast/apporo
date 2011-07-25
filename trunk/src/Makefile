@@ -2,8 +2,8 @@ CC  = /usr/bin/g++
 BIN = /usr/local/bin/
 LIB = /usr/local/lib/
 INC = /usr/local/include/
-SRC = apporo_config.cc apporo_config_test.cc apporo_index.cc apporo_query.cc apporo_resultset.cc apporo_search.cc apporo_searcher.cc apporo_strdistance.cc apporo_tsubomi_db.cc apporo_utf8.cc
-HDR = apporo_config.h apporo_query.h apporo_resultset.h apporo_search.h apporo_strdistance.h apporo_tsubomi_db.h apporo_utf8.h apporo_util.h
+SRC = apporo_config.cc apporo_config_test.cc apporo_index.cc apporo_query.cc apporo_resultset.cc apporo_search.cc apporo_searcher.cc apporo_strdistance.cc apporo_tsubomi_db.cc apporo_utf8.cc apporo_util.cc apporo_clang.cc
+HDR = apporo_config.h apporo_query.h apporo_resultset.h apporo_search.h apporo_strdistance.h apporo_tsubomi_db.h apporo_utf8.h apporo_util.h apporo_clang.h
 UNAME = $(shell uname)
 
 tools: apporo_indexer apporo_searcher apporo
@@ -24,14 +24,15 @@ libapporo.so.1.0: $(SRC) $(HDR)
 	$(CC) -O2 -Wall -fPIC -g -c apporo_strdistance.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_search.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_index.cc
+	$(CC) -O2 -Wall -fPIC -g -c apporo_clang.cc
 
 ifeq ($(UNAME), Darwin)
-	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
+	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo_clang.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
 else
-	$(CC) -O2 -Wall -g -shared -Wl,-soname,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
+	$(CC) -O2 -Wall -g -shared -Wl,-soname,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo_clang.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
 endif
 
-	ar rcs libapporo.a apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o
+	ar rcs libapporo.a apporo_clang.o apporo_tsubomi_db.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o
 
 clean:
 	- rm apporo

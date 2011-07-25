@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     string config_file_path(argv[1]);
     string query(argv[2]);
     Apporo *apporo = new Apporo(config_file_path);
-    vector <string> result = apporo->approximate_match(query);
+    vector <string> result = apporo->approximateMatch(query);
     for (int i = 0; i < (int)result.size(); i++) {
       cout << result[i] << endl;
     }
