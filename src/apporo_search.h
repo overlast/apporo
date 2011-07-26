@@ -21,17 +21,17 @@ namespace apporo {
       std::string engine;
       std::string index_path;
       int entry_buf_len;
-      apporo::strage::TsubomiDBSearch *tdb;
-      std::vector < std::pair <std::string, apporo::strage::sa_range> > getRange(apporo::query::NgramQuery *nq);
-      std::vector < std::pair <apporo::strage::sa_index, int> > getIDMap(std::map <apporo::strage::sa_index, apporo::strage::sa_index> &id_index_map, std::vector < std::pair<std::string, apporo::strage::sa_range> > &range_vector, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist);
+      apporo::storage::TsubomiDBSearch *tdb;
+      std::vector < std::pair <std::string, apporo::storage::sa_range> > getRange(apporo::query::NgramQuery *nq);
+      std::vector < std::pair <apporo::storage::sa_index, int> > getIDMap(std::map <apporo::storage::sa_index, apporo::storage::sa_index> &id_index_map, std::vector < std::pair<std::string, apporo::storage::sa_range> > &range_vector, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist);
       std::vector < std::pair <double, std::string> > matchApproximately(std::string engine, std::string index_path);
-      std::vector < std::pair <double, std::string> > rerankAndGetResult(std::vector <std::pair <apporo::strage::sa_index, int> > &id_freq_vec, std::map <apporo::strage::sa_index, apporo::strage::sa_index> &id_index_map, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist, int result_num = 0, int bucket_size = 2000);
+      std::vector < std::pair <double, std::string> > rerankAndGetResult(std::vector <std::pair <apporo::storage::sa_index, int> > &id_freq_vec, std::map <apporo::storage::sa_index, apporo::storage::sa_index> &id_index_map, apporo::query::NgramQuery *nq, apporo::strdistance::StringDistance *strdist, int result_num = 0, int bucket_size = 2000);
     };
 
     class DeleteID {
     public:
       int threshold;
-      bool operator()(std::pair <apporo::strage::sa_index, int> &x) const {
+      bool operator()(std::pair <apporo::storage::sa_index, int> &x) const {
 	return x.second > threshold;
       }
       DeleteID(int num);

@@ -5,6 +5,7 @@
 #include <string>
 #include "apporo_query.h"
 #include "apporo_strdistance.h"
+#include "apporo_tsubomi_db.h"
 
 namespace apporo {
   namespace util {
@@ -38,6 +39,24 @@ namespace apporo {
     struct sa_range_low_order {
       template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
 	return (((x.second).second - (x.second).first) > ((y.second).second - (y.second).first));
+      }
+    };
+
+    struct pair_first_equal {
+      template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
+	return x.first == y.first;
+      }
+    };
+
+    struct sa_index_first_equal {
+      bool operator()(const std::pair <apporo::storage::sa_index, apporo::storage::sa_index> &x, const std::pair <apporo::storage::sa_index, apporo::storage::sa_index> &y) const {
+	return x.second == y.second;
+      }
+    };
+
+    struct pair_second_equal {
+      template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
+	return x.second == y.second;
       }
     };
 

@@ -17,7 +17,7 @@ using namespace apporo::config;
 using namespace apporo::query;
 using namespace apporo::strdistance;
 using namespace apporo::search;
-using namespace apporo::strage;
+using namespace apporo::storage;
 
 Apporo::Apporo(string &config_file_path_)
   : config_file_path(config_file_path_) {

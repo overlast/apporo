@@ -8,7 +8,7 @@
 #include <string>
 
 namespace apporo {
-  namespace strage {
+  namespace storage {
     using namespace std;
     TsubomiDBSearch::TsubomiDBSearch(string &filename) :
       tsubomi::basic_searcher(filename.c_str()), mr_did_(filename + ".did") {

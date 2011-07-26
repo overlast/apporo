@@ -4,7 +4,7 @@
 
 using namespace std;
 using namespace apporo;
-using namespace apporo::strage;
+using namespace apporo::storage;
 
 void show_usage(void) {
   cout << "----" << endl;

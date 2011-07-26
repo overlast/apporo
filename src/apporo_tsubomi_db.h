@@ -7,7 +7,7 @@
 #include <string>
 
 namespace apporo {
-  namespace strage {
+  namespace storage {
     
     typedef int                           sa_index;
     typedef std::pair<sa_index, sa_index> sa_range;
