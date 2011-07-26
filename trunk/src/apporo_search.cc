@@ -55,14 +55,14 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
     vector <sa_index> &id_bucket = tmp_id_bucket;
     for (vector < pair<string, sa_range> >::iterator it = range_vector.begin(), eit = range_vector.end(); it != eit; ++it) {
       pair <string, sa_range> item = (*it);
-      prev_id = -1;
+      //prev_id = -1;
       for (sa_index i = (item.second).first, e = (item.second).second; i <= e; i++) {
 	sa_index id = tdb->getDID(i);
 	id_bucket.push_back(id);
-	if (prev_id != id) {	
-	  id_index_vec.push_back(pair<sa_index, sa_index>(id, i));
-	  prev_id = id;
-	}
+	//if (prev_id != id) {	
+	id_index_vec.push_back(pair<sa_index, sa_index>(id, i));
+	//  prev_id = id;
+	//}
       }
 
       if (ngram_que_limit <= 0) {
@@ -118,16 +118,19 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
       ngram_que_limit--;
     }
 
-    if (ngram_que_limit < 0) {}
+    if (ngram_que_limit < 0) {
+      sort(id_index_vec.begin(), id_index_vec.end(), pair_first_up_order());
+    }
     else {
-      sort(id_bucket.begin(), id_bucket.end());
+      sort(id_index_vec.begin(), id_index_vec.end(), pair_first_up_order());
+      //sort(id_bucket.begin(), id_bucket.end());
       count = 0;
-      sa_index *prev_id_p = &(id_bucket[0]);
-      for (vector < sa_index >::iterator idit = id_bucket.begin(), ideit = id_bucket.end(); idit != ideit; ++idit) {
-	if (*prev_id_p != *idit) {
+      sa_index *prev_id_p = &(id_index_vec[0].first);
+      for (vector < pair<sa_index,sa_index> >::iterator bi = id_index_vec.begin(), ei = id_index_vec.end(); bi != ei; ++bi) {
+	if (*prev_id_p != (*bi).first) {
 	  id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count));
 	  count = 1;
-	  prev_id_p = &(*idit);
+	  prev_id_p = &((*bi).first);
 	}
 	else { count++; }
       }
