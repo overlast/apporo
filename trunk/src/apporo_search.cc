@@ -47,7 +47,6 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &
   int id_freq_vec_count = id_freq_vec.size();
   vector < pair <sa_index, sa_index> > id_index_vec;
   int count = 0;
-  sa_index prev_id = -1;
   
   if (nq->dist_threshold > 0.0) {
     ngram_que_limit -= strdist->search_threshold[nq->min_hit_num].first;
