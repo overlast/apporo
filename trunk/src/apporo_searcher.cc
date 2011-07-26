@@ -71,11 +71,14 @@ int main(int argc, char** argv) {
     // Step1-1. N-gram query の token ごとに SuffixArray 上の範囲を取得
     vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq); //engine に依存
     // Step1-2. 範囲から Doc ID を取得して集計
-    map <sa_index, sa_index> id_index_map;
-    vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist); //engine に依存
+    //map <sa_index, sa_index> id_index_map;
+    vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
+    //vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist); //engine に依存
+    vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist); //engine に依存
 
     // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
-    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num, bucket_size); //engine に依存
+    //vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num, bucket_size); //engine に依存
+    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size); //engine に依存
     
     // 結果を出力する
     showResult(result, nq, strdist, result_num); //engine に非依存
