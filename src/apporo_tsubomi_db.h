@@ -28,6 +28,7 @@ namespace apporo {
       TsubomiDBSearch(std::string &filename);
       ~TsubomiDBSearch();
       std::map <int, int> id_cache;
+      int entry_num;
       sa_index getDID(sa_index &num);
       sa_index binaryDIDSearch(sa_index &offset, sa_index begin, sa_index end);
     protected:
