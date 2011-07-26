@@ -4,7 +4,7 @@
 #include "apporo_search.h"
 
 using namespace std;
-using namespace apporo::strage;
+using namespace apporo::storage;
 using namespace apporo::strdistance;
 using namespace apporo::util;
 using namespace apporo::search;
