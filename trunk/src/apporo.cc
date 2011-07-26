@@ -39,7 +39,7 @@ void Apporo::prepare() {
   is_utf8 = false;
   dist_threshold = 0.0;
   index_path = "";
-  dist_func = "edit";
+  dist_func = "dice";
   entry_buf_len = 1024;
   engine = "tsubomi";
   result_num = 10;

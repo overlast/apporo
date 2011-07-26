@@ -42,24 +42,6 @@ namespace apporo {
       }
     };
 
-    struct pair_first_equal {
-      template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
-	return x.first == y.first;
-      }
-    };
-
-    struct sa_index_first_equal {
-      bool operator()(const std::pair <apporo::storage::sa_index, apporo::storage::sa_index> &x, const std::pair <apporo::storage::sa_index, apporo::storage::sa_index> &y) const {
-	return x.second == y.second;
-      }
-    };
-
-    struct pair_second_equal {
-      template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
-	return x.second == y.second;
-      }
-    };
-
     struct sa_range_up_order {
       template <class T, class K> bool operator()(const std::pair <T, K> &x, const std::pair <T, K> &y) const {
 	return (((x.second).second - (x.second).first) < ((y.second).second - (y.second).first));
