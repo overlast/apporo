@@ -79,11 +79,8 @@ vector <string> Apporo::approximateMatch(string &query) {
   StringDistance *strdist = new StringDistance(dist_func, ngram_length, nq->chars_num, dist_threshold);
   NgramSearch *ngram_searcher = new NgramSearch(engine, index_path, entry_buf_len);
   vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq);
-  //map <sa_index, sa_index> id_index_map;
   vector <sa_index> index_vec;
-  //vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(id_index_map, range_vector, nq, strdist);
   vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist);
-  //vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, id_index_map, nq, strdist, result_num, bucket_size);
   vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
 
   for (int i = 0; i < (int)result.size(); i++) {
