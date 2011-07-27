@@ -106,8 +106,6 @@ template <typename T>
 double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, string &str2) {
   double res = 0.0;
   vector <int> vec2 = apporo::utf8::getUTF8Width(str2);
-  //cout << vec2.size() << endl;
-  //cout << vec1.size() << endl;
   int vec1_len = vec1.size();
   int vec2_len = vec2.size();
 
@@ -121,13 +119,8 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
 
   int m = v1.size();
   int n = v2.size();
-  //cout << vec2.size() << endl;
-  //cout << vec1.size() << endl;  
-
   if (m > bit_len) { m = bit_len; }
   if (n > bit_len) { n = bit_len; }
-  //cout << "s1:" << s1 << " s2:" << s2 << endl;  
-  //cout << "m:"<< m << ":n:" << n << endl;
 
   const T one = 1;
   T VP = 0;
@@ -135,8 +128,6 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   int err = m;
   map <string, T> B; // when ASCII, string have to replace with char.
   for (int i = 0, focus = 0; i < m; focus += v1[i], i++) {
-    //if (focus + v1[i] >= (int)s1.size()) {break;}
-    //cout << v1[i] << ":" << s1.substr(focus, v1[i]) << ":" << s1 << ":"<< i << ":" << m<< endl;
     string s1v1 = s1.substr(focus, v1[i]);
     if (B.find(s1v1) != B.end()) {
       B[s1v1] |= one << i;
@@ -151,8 +142,6 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
   
   for (int j = 0, focus = 0; j < n; focus += v2[j], j++) {
     T X;
-    //cout << v2[j] << ":" << s2.substr(focus, v2[j]) << endl;
-    //if (focus + v2[j] >= (int)s2.size()) {break;}
     string s2v2 = s2.substr(focus, v2[j]);
     if (B.find(s2v2) != B.end()){ X = B[s2v2] | VN; }
     else { X = 0 + VN; }
@@ -187,21 +176,11 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
   
   if (m > bit_len) { m = bit_len * 8; }
   if (n > bit_len) { n = bit_len * 8; }
-  //cout << "s1:" << s1 << " s2:" << s2 << endl;  
-  //cout << "m:"<< m << ":n:" << n << endl;
 
   const T one = 1;
   T VP = 0;
   T VN = 0;
   int err = m;
-
-  /*
-  T B[256] = {0};
-  for (int i = 0; i < m; i++) {
-    B[s1[i]] |= (one << i);
-    VP |= (one << i);
-  }
-  */
   
   map <char, T> B; // when UTF8, char have to replace with string.
   for (int i = 0; i < m; i++) {
@@ -215,17 +194,11 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
     }
     VP |= one << i;
   }
-  
 
   for (int j = 0; j < n; j++) {
-    
     T X = 0;
     if (B.find(s2[j]) != B.end()){ X = B[s2[j]] | VN; }
     else { X |=  VN; }
-    
-    /*
-    T X = B[(int)s2[j]] | VN;
-    */
 
     T D0 = ((VP + (X & VP)) ^ VP) | X;
     T HN = VP & D0;
@@ -237,7 +210,6 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
     else if (HN & (one << (m - 1))) { err--; }
   }
 
-  //cout << "err:" << err << " m:"<< m << endl;
   res = 1.0 - ((double)err / (double)m);
   return res;
 }
@@ -256,7 +228,6 @@ double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string 
   vector < vector <int> > matrix = initMatrix(matrix_width);
   for (int i = 0, focus1 = 0; i < vec1_len; focus1 += vec1[i], i++) {
     for (int j = 0, focus2 = 0; j < vec2_len; focus2 += vec2[j], j++) {
-      //if ((vec1[i] == vec2[j]) && (str1.substr(focus1, vec1[i]) == str2.substr(focus2, vec2[j]))) {
       if ((vec1[i] == vec2[j]) && (0 == str1.compare(focus1, vec1[i], str2, focus2, vec2[j]))) {
 	matrix[i + 1][j + 1] = matrix[i][j];
       }
