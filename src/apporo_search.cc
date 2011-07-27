@@ -18,7 +18,7 @@ NgramSearch::NgramSearch (string &engine_, string &index_path_, int entry_buf_le
   }
   return;
 }
-NgramSearch::~NgramSearch () { 
+NgramSearch::~NgramSearch () {
   delete tdb;
   return;
 }
@@ -47,7 +47,9 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
   int count = 0;
   vector <sa_index> tmp_id_bucket;
   vector <sa_index> &id_bucket = tmp_id_bucket;
+
   if (nq->dist_threshold > 0.0) {
+    
     ngram_que_limit -= strdist->search_threshold[nq->min_hit_num].first;
     for (vector < pair<string, sa_range> >::iterator bi = range_vector.begin(), ei = range_vector.end(); bi != ei; ++bi) {
       pair <string, sa_range> item = (*bi);
@@ -133,6 +135,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
     if (id_delete_it != id_freq_vec_end_it) {
       id_freq_vec.erase(id_delete_it, id_freq_vec_end_it);
     }
+    
   }
   else {
     for (vector < pair<string, sa_range> >::iterator bi = range_vector.begin(), ei = range_vector.end(); bi != ei; ++bi) {
@@ -143,6 +146,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
 	index_vec[id] = i;
       }
     }
+    
     sort(id_bucket.begin(), id_bucket.end());
     count = 0;
     sa_index *prev_id_p = &id_bucket[0];
@@ -158,8 +162,10 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
       id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count));
       count = 0;
     }
+    
   }
   sort(id_freq_vec.begin(), id_freq_vec.end(), pair_second_low_order());
+  
   return id_freq_vec;
 }
 
