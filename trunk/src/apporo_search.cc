@@ -146,7 +146,6 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
 	index_vec[id] = i;
       }
     }
-    
     sort(id_bucket.begin(), id_bucket.end());
     count = 0;
     sa_index *prev_id_p = &id_bucket[0];
