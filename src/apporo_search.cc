@@ -1,5 +1,4 @@
 #include "apporo_search.h"
-#include "apporo_profile.h"
 
 using namespace std;
 using namespace apporo;
@@ -39,8 +38,6 @@ vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
   return ngram_vector;
 }
 
-
-//vector < pair <sa_index, int> > NgramSearch::getIDMap(map <sa_index, sa_index> &id_index_map, vector < pair<string, sa_range> > &range_vector, NgramQuery *nq, StringDistance *strdist) {
 vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_vec, vector < pair<string, sa_range> > &range_vector, NgramQuery *nq, StringDistance *strdist) {
   int ngram_que_count = range_vector.size();
   int ngram_que_limit = ngram_que_count;
