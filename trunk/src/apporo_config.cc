@@ -7,7 +7,7 @@ using namespace std;
 using namespace apporo;
 using namespace apporo::config;
 
-ConfigFile::ConfigFile(std::string &file_path_) 
+ConfigFile::ConfigFile(std::string &file_path_)
   : file_path(file_path_) {
   this->readConfig();
   return;

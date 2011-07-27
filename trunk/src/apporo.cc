@@ -73,16 +73,18 @@ void Apporo::prepare() {
 }
 
 vector <string> Apporo::approximateMatch(string &query) {
-  cout << query << endl;
   vector <string> res;
   NgramQuery *nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
   StringDistance *strdist = new StringDistance(dist_func, ngram_length, nq->chars_num, dist_threshold);
   NgramSearch *ngram_searcher = new NgramSearch(engine, index_path, entry_buf_len);
   vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq);
-  vector <sa_index> index_vec;
-  vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist);
-  vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
 
+  vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
+
+  vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist);
+  
+  vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
+  
   for (int i = 0; i < (int)result.size(); i++) {
     std::stringstream ss;
     string tmp;
@@ -92,7 +94,7 @@ vector <string> Apporo::approximateMatch(string &query) {
     res.push_back(tmp);
     if (i >= result_num) { break; }
   }
-
+  
   delete ngram_searcher;
   delete strdist;
   delete nq;
