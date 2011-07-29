@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
     vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq); //engine に依存
     // Step1-2. 範囲から Doc ID を取得して集計
     vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
-    vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist); //engine に依存
+    vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size); //engine に依存
 
     // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
     vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size); //engine に依存

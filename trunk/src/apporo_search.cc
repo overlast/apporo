@@ -38,7 +38,7 @@ vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
   return ngram_vector;
 }
 
-vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_vec, vector < pair<string, sa_range> > &range_vector, NgramQuery *nq, StringDistance *strdist) {
+vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_vec, vector < pair<string, sa_range> > &range_vector, NgramQuery *nq, StringDistance *strdist, int bucket_size) {
   int ngram_que_count = range_vector.size();
   int ngram_que_limit = ngram_que_count;
   vector < pair <sa_index, int> > dummy_id_freq_vec;
@@ -80,6 +80,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
 	id_bucket = null_id_bucket;
 
 	sort(id_freq_vec.begin(), id_freq_vec.end(), pair_first_up_order());
+
 	vector < pair <sa_index, int> > tmp_id_freq_vec;
 	count = 0;
 	prev_id_p = &(id_freq_vec[0].first);
@@ -163,8 +164,12 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
     }
     
   }
-  sort(id_freq_vec.begin(), id_freq_vec.end(), pair_second_low_order());
-  
+  if (0 == bucket_size) {
+    sort(id_freq_vec.begin(), id_freq_vec.end(), pair_second_low_order());
+  }
+  else {
+    partial_sort(id_freq_vec.begin(), id_freq_vec.begin() + bucket_size, id_freq_vec.end(), pair_second_low_order());
+  }
   return id_freq_vec;
 }
 
@@ -188,6 +193,9 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
       push_count++; // 足して良い時と悪い時がある
     }
   }
-  sort(result.begin(), result.end(), pair_first_low_order());
+  if (0 != result_num) {
+    partial_sort(result.begin(), result.begin() + result_num, result.end(), pair_first_low_order());
+  }
+  else { sort(result.begin(), result.end(), pair_first_low_order()); }
   return result;
 }
