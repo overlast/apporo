@@ -3,6 +3,8 @@
 
 #include <string>
 #include <vector>
+#include "apporo_utf8.h"
+
 
 namespace apporo {
   namespace strdistance {

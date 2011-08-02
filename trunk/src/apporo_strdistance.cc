@@ -106,7 +106,7 @@ double StringDistance::getEditDist(string &str1, string &str2) {
 template <typename T>
 double StringDistance::getUTF8BPMEditDist(string &str1, string &str2) {
   vector <int> vec1 = apporo::utf8::getUTF8Width(str1);
-  return this->getUTF8BPMEditDist(str1, vec1, str2);
+  return this->getUTF8BPMEditDist<T>(str1, vec1, str2);
 }
 
 template <typename T>
@@ -221,8 +221,6 @@ double StringDistance::getBPMEditDist(string &str1, string &str2) {
   return res;
 }
 
-
-template <typename T>
 double StringDistance::getUTF8EditDist(string &str1, string &str2) {
   vector <int> vec1 = apporo::utf8::getUTF8Width(str1);
   return this->getUTF8EditDist(str1, vec1, str2);
