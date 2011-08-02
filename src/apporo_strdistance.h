@@ -18,9 +18,11 @@ namespace apporo {
       std::vector < std::pair <int, int> > getSearchThreshold(std::string &dist_func, int chars_num, int ngram_length, double dist_threshold);
       std::vector < std::vector <int> > initMatrix(int num);
       double getEditDist(std::string &str1, std::string &str2);
+      double getUTF8EditDist(std::string &str1, std::string &str2);
       double getUTF8EditDist(std::string &str1, std::vector <int> &vec1, std::string &str2);
-      template <typename T> double getBPAEditDist(std::string &str1, std::string &str2);
-      template <typename T> double getUTF8BPAEditDist(std::string &str1, std::vector <int> &vec1, std::string &str2);
+      template <typename T> double getBPMEditDist(std::string &str1, std::string &str2);
+      template <typename T> double getUTF8BPMEditDist(std::string &str1, std::string &str2);
+      template <typename T> double getUTF8BPMEditDist(std::string &str1, std::vector <int> &vec1, std::string &str2);
       double getStringDistance(std::string &str_dist, std::string &str1, std::string &str2, std::vector <int> &str1_utf8_width);
     };
   }

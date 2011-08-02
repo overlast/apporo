@@ -10,13 +10,14 @@ using namespace std;
 using namespace apporo;
 using namespace apporo::strdistance;
 
+
 StringDistance::StringDistance(string &dist_func_, int ngram_length_, int query_chars_num_, double dist_threshold_)
   : dist_func(dist_func_), ngram_length(ngram_length_), query_chars_num(query_chars_num_), dist_threshold(dist_threshold_) { 
   if ((dist_threshold_ > 0.0) && (query_chars_num > 0)) {
     search_threshold = getSearchThreshold(dist_func, query_chars_num, ngram_length, dist_threshold);
   }
   return;
- }
+}
 StringDistance::~StringDistance() { return; }
 
 vector < pair <int, int> > StringDistance::getSearchThreshold(string &dist_func, int chars_num, int ngram_length, double dist_threshold) {
@@ -103,7 +104,13 @@ double StringDistance::getEditDist(string &str1, string &str2) {
 }
 
 template <typename T>
-double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, string &str2) {
+double StringDistance::getUTF8BPMEditDist(string &str1, string &str2) {
+  vector <int> vec1 = apporo::utf8::getUTF8Width(str1);
+  return this->getUTF8BPMEditDist(str1, vec1, str2);
+}
+
+template <typename T>
+double StringDistance::getUTF8BPMEditDist(string &str1, vector <int> &vec1, string &str2) {
   double res = 0.0;
   vector <int> vec2 = apporo::utf8::getUTF8Width(str2);
   int vec1_len = vec1.size();
@@ -162,7 +169,7 @@ double StringDistance::getUTF8BPAEditDist(string &str1, vector <int> &vec1, stri
 }
 
 template <typename T>
-double StringDistance::getBPAEditDist(string &str1, string &str2) {
+double StringDistance::getBPMEditDist(string &str1, string &str2) {
   double res = 0.0;
   string s1;
   string s2;
@@ -215,6 +222,12 @@ double StringDistance::getBPAEditDist(string &str1, string &str2) {
 }
 
 
+template <typename T>
+double StringDistance::getUTF8EditDist(string &str1, string &str2) {
+  vector <int> vec1 = apporo::utf8::getUTF8Width(str1);
+  return this->getUTF8EditDist(str1, vec1, str2);
+}
+
 double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string &str2) {
   
   double res = 0.0;
@@ -247,7 +260,7 @@ double StringDistance::getStringDistance(string &str_dist, string &str1, string 
   double dist = 0.0;
   if (!str1_utf8_width.empty()) {
     if ((str1.size() <= 64) && (str2.size() <= 64)) {
-      dist = getUTF8BPAEditDist<unsigned long long>(str1, str1_utf8_width, str2);
+      dist = getUTF8BPMEditDist<unsigned long long>(str1, str1_utf8_width, str2);
     }
     else {
       dist = getUTF8EditDist(str1, str1_utf8_width, str2);
@@ -255,7 +268,7 @@ double StringDistance::getStringDistance(string &str_dist, string &str1, string 
   }
   else {
     if ((str1.size() <= 64) && (str1.size() <= 64)) {
-      dist = getBPAEditDist<unsigned long long>(str1, str2);
+      dist = getBPMEditDist<unsigned long long>(str1, str2);
     }
     else {
 	dist = getEditDist(str1, str2);
