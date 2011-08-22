@@ -9,5 +9,5 @@ use YAML;
 my $path = $ARGV[0];
 my $query = $ARGV[1];
 my $app = Apporo->new($path);
-my @arr = $app->approximate_match($query);
+my @arr = $app->retrieve($query);
 print Dump \@arr;

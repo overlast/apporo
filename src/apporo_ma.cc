@@ -7,11 +7,11 @@ using namespace apporo::ma;
 
 MA::MA(string &parser_name_)
   : parser_name(parser_name_) {
-  ma = new MAMeCab();
+  mai = new MAMeCab();
   return;
 }
 MA::~MA() {
-  delete ma;
+  delete mai;
   return;
 }
 

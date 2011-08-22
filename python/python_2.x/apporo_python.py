@@ -6,8 +6,8 @@ class Apporo(object):
     def __init__(self, path):
         self.app = apporo.new(path)
 
-    def approximate_match(self, query):
-        return apporo.approximate_match(self.app, query)
+    def retrieve(self, query):
+        return apporo.retrieve(self.app, query)
 
     def delete(self):
         apporo.delete(self.app)

@@ -16,9 +16,9 @@ void app_c_delete(void* p) {
   delete (Apporo*)p;
 }
 
-char** app_c_approximate_match(void* p, char* query_) {
+char** app_c_retrieve(void* p, char* query_) {
   string query(query_);
-  vector <string> vec =  ((Apporo*)p)->approximateMatch(query);
+  vector <string> vec =  ((Apporo*)p)->retrieve(query);
   int vec_size = vec.size();
   char** res = (char**)malloc(sizeof(char*) * vec_size);
   int count = 0;
