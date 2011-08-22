@@ -72,7 +72,7 @@ void Apporo::prepare() {
   return;
 }
 
-vector <string> Apporo::approximateMatch(string &query) {
+vector <string> Apporo::retrieve(string &query) {
   vector <string> res;
   NgramQuery *nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
   StringDistance *strdist = new StringDistance(dist_func, ngram_length, nq->chars_num, dist_threshold);

@@ -7,7 +7,7 @@ extern "C" {
 
   void* app_c_new(char*);
   void app_c_delete(void*);
-  char** app_c_approximate_match(void*, char*);
+  char** app_c_retrieve(void*, char*);
 
 #ifdef __cplusplus
 }

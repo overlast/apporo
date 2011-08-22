@@ -17,7 +17,7 @@ static PyObject *apporo_new(PyObject *self, PyObject *args) {
   return (PyObject *)app;
 }
 
-static PyObject *apporo_approximate_match(PyObject *self, PyObject *args) {
+static PyObject *apporo_retrieve(PyObject *self, PyObject *args) {
   PyObject *res = NULL;
   Apporo *app;
   const char* query_;
@@ -25,7 +25,7 @@ static PyObject *apporo_approximate_match(PyObject *self, PyObject *args) {
     return NULL;
   }
   string query(query_);
-  vector <string> list = app->approximateMatch(query);
+  vector <string> list = app->retrieve(query);
   
   if (!list.empty()) {
     int list_len = list.size();
@@ -49,7 +49,7 @@ static PyObject *apporo_delete(PyObject *self, PyObject *args) {
 
 static PyMethodDef MethodDef[] = {
   {"new", apporo_new, METH_VARARGS, NULL},
-  {"approximate_match", apporo_approximate_match, METH_VARARGS, NULL},
+  {"retrieve", apporo_retrieve, METH_VARARGS, NULL},
   {"delete", apporo_delete, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };

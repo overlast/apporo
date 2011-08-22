@@ -4,7 +4,7 @@ import sys
 import apporo
 
 app = apporo.new(sys.argv[1]);
-ret = apporo.approximate_match(app, sys.argv[2]);
+ret = apporo.retrieve(app, sys.argv[2]);
 for item in ret:
     print item
 ret = None

@@ -44,11 +44,11 @@ void
 Apporo::DESTROY()
 
 AV*
-Apporo::approximate_match(char* query)
+Apporo::retrieve(char* query)
 CODE:
   AV *res = newAV();
   string q(query);
-  vector <string> vec = THIS->approximateMatch(q);
+  vector <string> vec = THIS->retrieve(q);
   av_extend(res, vec.size() - 1);
   for (size_t i = 0; i < vec.size(); i++) {
     SV *tmp = newSVpv(vec[i].c_str(), 0);

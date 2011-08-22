@@ -11,7 +11,7 @@ namespace apporo {
       MA(std::string &ma);
       ~MA();
       std::string parser_name;
-      MAInterface *ma;
+      MAInterface *mai;
       std::string getParserName(void);
     };
 }
