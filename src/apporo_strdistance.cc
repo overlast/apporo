@@ -22,34 +22,63 @@ StringDistance::~StringDistance() { return; }
 
 vector < pair <int, int> > StringDistance::getSearchThreshold(string &dist_func, int chars_num, int ngram_length, double dist_threshold) {
   vector < pair <int, int> > vec;
+  int X = chars_num + ngram_length - 1;
+  int min = 0;
+  int max = 0;
+  int min_y = 0;
+
+  if ("edit" == dist_func) {
+    min = (X) - (int)(((double)(X) * (1.0 - dist_threshold) * (double)ngram_length) + 0.5);
+    max = (X) - (int)(((double)(X) * (1.0 - dist_threshold) + (double)ngram_length) + 0.5);
+  }
+  else if ("dice" == dist_func) {
+    min_y = (int)(((dist_threshold / (2.0 - dist_threshold)) * (double)X) + 0.5);
+    int maxY = (int)((((2.0 - dist_threshold) / dist_threshold) * (double)X) + 0.5);
+    max = (int)(0.5 * dist_threshold * ((double)(X) + (double)(maxY)));
+  }
+  else if ("jaccard" == dist_func) {
+    min_y = (int)((dist_threshold * (double)X) + 0.5);
+    int maxY = (int)((double)X / dist_threshold + 0.5);
+    max = (int)((dist_threshold * ((double)(X) + (double)(maxY))) / (1.0 + dist_threshold));
+  }
+  else if ("cosine" == dist_func) {
+    min_y = (int)((dist_threshold * dist_threshold * (double)X) + 0.5);
+    int maxY = (int)((double)X / (dist_threshold * dist_threshold) + 0.5);
+    max = (int)(dist_threshold * sqrt((double)(X) * (double)(maxY)) + 0.5);
+  }
+  else if ("overlap" == dist_func) {
+    min_y = 0;
+    int maxY = 100000;
+    max = (int)(dist_threshold * (double)std::min(X, maxY));
+  }
+  
   for (int i = 0; i < 256; i++) {
-    int min = 0;
-    int max = 0;
     if (i > 0) {
-      if ("edit" == dist_func) {
-	min = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) * (double)ngram_length);
-	max = (chars_num + ngram_length + 1) - (int)((double)(chars_num + ngram_length + 1) * (1.0 - dist_threshold) + (double)ngram_length);
-      }
-      else if ("dice" == dist_func) {
-	min = (int)(dist_threshold / (2.0 - dist_threshold) * (double)(chars_num + ngram_length + 1));
-	max = (int)(0.5 * dist_threshold * ((double)(chars_num + ngram_length + 1) + (double)i));
+      if ("dice" == dist_func) {
+	int tmp_min_y = min_y;
+	if (tmp_min_y < i) { tmp_min_y = i; }
+	min = (int)(0.5 * dist_threshold * ((double)(X) + (double)(tmp_min_y)));
       }
       else if ("jaccard" == dist_func) {
-	min = (int)(dist_threshold * (double)(chars_num + ngram_length + 1));
-	max = (int)(dist_threshold * ((double)(chars_num + ngram_length + 1) + (double)i) / (1.0 + dist_threshold));
+	int tmp_min_y = min_y;
+	if (tmp_min_y < i) { tmp_min_y = i; }
+	min = (int)((dist_threshold * ((double)(X) + (double)(tmp_min_y))) / (1.0 + dist_threshold));
       }
       else if ("cosine" == dist_func) {
-	min = (int)(dist_threshold * dist_threshold * (double)(chars_num + ngram_length + 1));
-	max = (int)(dist_threshold * sqrt((double)(chars_num + ngram_length + 1) * (double)i));
+	int tmp_min_y = min_y;
+	if (tmp_min_y < i) { tmp_min_y = i; }
+	min = (int)(dist_threshold * sqrt((double)(X) * (double)(tmp_min_y)) + 0.5);
       }
       else if ("overlap" == dist_func) {
-	min = 0;
-	max = (int)(dist_threshold * (double)std::min(chars_num + ngram_length + 1, i));
+	int tmp_min_y = min_y;
+	if (tmp_min_y < i) { tmp_min_y = i; }
+	min = (int)(dist_threshold * (double)std::min(X, tmp_min_y));
       }
       if (min < 0) { min = 0; }
       if (max < 0) { max = 0; }
       //cout << "score threshold:"<< min << "-" << max << endl;
     }
+    if (min > max) { break; }
     pair <int, int> threshold(min, max);
     vec.push_back(threshold);
   }

@@ -29,7 +29,6 @@ vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
     string query_str = *bi;
     sa_range p = this->tdb->search(query_str.c_str());
     //cout << query_str  << ":" << p.first << ":" << p.second << endl;
-    if (p.first < 0) { continue; }
     pair <string, sa_range> ngram_freq(query_str, p);
     ngram_vector.push_back(ngram_freq);
     //ngram_que_count++;
@@ -46,7 +45,104 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
   int id_freq_vec_count = id_freq_vec.size();
   int count = 0;
   vector <sa_index> tmp_id_bucket;
+  vector <sa_index> id_count(index_vec.size(), 0);
+  
+  if (nq->dist_threshold > 0.0) {
+    ngram_que_limit -= strdist->search_threshold[nq->min_hit_num].first;
+    for (vector < pair<string, sa_range> >::iterator bi = range_vector.begin(), ei = range_vector.end(); bi != ei; ++bi) {
+      pair <string, sa_range> item = (*bi);
+      if ((item.second).first < 0) { continue; }
+      for (sa_index i = (item.second).first, e = (item.second).second; i <= e; i++) {
+	sa_index id = tdb->getDID(i);
+	index_vec[id] = i;
+	id_count[id]++;
+	count++;
+      }
+      if (ngram_que_limit <= 0) {
+	if (count > 0) {
+	  for (size_t i = 0; i < index_vec.size(); i++) {
+	    if ((id_count[i] != 0) && (id_count[i] + ngram_que_count < strdist->search_threshold[nq->min_hit_num].first)) {
+	      id_count[i] = 0;
+	      count--;
+	      //cout << "^" << endl;
+	      //cout << i << ":" << id_count[i] << ":" <<  ngram_que_count << ":" << strdist->search_threshold[nq->min_hit_num].second  << endl;
+	    }
+	    else {
+	      if (id_count[i] != 0) {
+		//cout << i << ":" << id_count[i] <<  endl;
+	      }
+	    }
+	  }
+	}
+	int tmp_id_freq_vec_count = count;
+	if (id_freq_vec_count >= tmp_id_freq_vec_count) { break; }
+	else { id_freq_vec_count = tmp_id_freq_vec_count; }
+      }
+      else {
+	id_freq_vec_count = count;
+      }
+      ngram_que_count--;
+      ngram_que_limit--;
+    }
+    if (count > 0) {
+      //cout << "qqqq" << endl;
+      for (size_t i = 0; i < index_vec.size(); i++) {
+	if (id_count[i] > 0) {
+	  id_freq_vec.push_back(pair<sa_index, int>(i, id_count[i]));
+	}
+      }
+    }
+    //cout << "size: " << id_freq_vec.size() << endl;
+    vector< pair <sa_index, int> >::iterator id_freq_vec_end_it;
+    vector< pair <sa_index, int> >::iterator id_delete_it = remove_if(id_freq_vec.begin(), id_freq_vec_end_it, DeleteID(strdist->search_threshold[nq->min_hit_num].second));
+    if (id_delete_it != id_freq_vec_end_it) {
+      cout << "kesu" << endl;
+      id_freq_vec.erase(id_delete_it, id_freq_vec_end_it);
+    }
+
+  }
+  else {
+    count = 0;
+    for (vector < pair<string, sa_range> >::iterator bi = range_vector.begin(), ei = range_vector.end(); bi != ei; ++bi) {
+      pair <string, sa_range> item = (*bi);
+      for (sa_index i = (item.second).first, e = (item.second).second; i <= e; i++) {
+	sa_index id = tdb->getDID(i);
+	index_vec[id] = i;
+	id_count[id]++;
+      }
+      count++;
+    }
+    if (count > 0) {
+      for (size_t i = 0; i < index_vec.size(); i++) {
+	if (id_count[i] > 0) {
+	  id_freq_vec.push_back(pair<sa_index, int>(i, id_count[i]));
+	}
+      }
+      count = 0;
+    }
+  }
+  //cout << "ugaga" << endl;
+  if (0 == bucket_size) {
+    sort(id_freq_vec.begin(), id_freq_vec.end(), pair_second_low_order());
+  }
+  else {
+    partial_sort(id_freq_vec.begin(), id_freq_vec.begin() + bucket_size, id_freq_vec.end(), pair_second_low_order());
+  }
+  return id_freq_vec;
+}
+
+
+/*
+vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_vec, vector < pair<string, sa_range> > &range_vector, NgramQuery *nq, StringDistance *strdist, int bucket_size) {
+  int ngram_que_count = range_vector.size();
+  int ngram_que_limit = ngram_que_count;
+  vector < pair <sa_index, int> > dummy_id_freq_vec;
+  vector < pair <sa_index, int> > &id_freq_vec = dummy_id_freq_vec;
+  int id_freq_vec_count = id_freq_vec.size();
+  int count = 0;
+  vector <sa_index> tmp_id_bucket;
   vector <sa_index> &id_bucket = tmp_id_bucket;
+  vector <sa_index> id_count(index_vec.size(), 0);
 
   if (nq->dist_threshold > 0.0) {
     
@@ -76,9 +172,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
 	  id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count));
 	  count = 0;
 	}
-	
-	id_bucket = null_id_bucket;
-
+	swap(id_bucket, null_id_bucket);
 	sort(id_freq_vec.begin(), id_freq_vec.end(), pair_first_up_order());
 
 	vector < pair <sa_index, int> > tmp_id_freq_vec;
@@ -98,7 +192,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
 	  else { tmp_id_freq_vec.push_back(pair<sa_index, int>(*prev_id_p, count)); }
 	  count = 0;
 	}
-	id_freq_vec = tmp_id_freq_vec;
+	swap(id_freq_vec, tmp_id_freq_vec);
 	int tmp_id_freq_vec_count = (int)id_freq_vec.size();
 	//cout << id_freq_vec_count << ":" << tmp_id_freq_vec_count << endl;
 	if (id_freq_vec_count >= tmp_id_freq_vec_count) { break; }
@@ -147,6 +241,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
 	index_vec[id] = i;
       }
     }
+    
     sort(id_bucket.begin(), id_bucket.end());
     count = 0;
     sa_index *prev_id_p = &id_bucket[0];
@@ -172,6 +267,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
   }
   return id_freq_vec;
 }
+*/
 
 vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <sa_index, int> > &id_freq_vec, vector <sa_index> &index_vec, NgramQuery *nq, StringDistance *strdist, int result_num, int bucket_size) {
   int push_count = 0;
