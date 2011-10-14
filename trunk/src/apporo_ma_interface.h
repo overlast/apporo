@@ -1,19 +1,18 @@
 #ifndef APPORO_MA_INTERFACE_H
 #define APPORO_MA_INTERFACE_H
 
-#import <string>
+#include <string>
 
 namespace apporo {
   namespace ma {
     class MAInterface {
     public:
-      MAInterface() {};
-      ~MAInterface() {};
-      virtual std::string getMAResult(std::string &str);
-      virtual std::string getRoman(std::string &str);
-      virtual std::string getYomi(std::string &str);
+      MAInterface() { return; }
+      virtual ~MAInterface() { return; }
+      virtual std::string getMAResult(std::string &str)=0;
+      virtual std::string getRoman(std::string &str)=0;
+      virtual std::string getYomi(std::string &str)=0;
     };
-    
   }
 }
 

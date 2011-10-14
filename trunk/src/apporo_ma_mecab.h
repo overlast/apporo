@@ -1,8 +1,11 @@
 #ifndef APPORO_MA_MECAB_H
 #define APPORO_MA_MECAB_H
 
-#import <string>
-#import "apporo_ma_interface.h"
+#include "apporo_ma_interface.h"
+#include <mecab.h>
+#include <string>
+#include <vector>
+#include <iostream>
 
 namespace apporo {
   namespace ma {
@@ -10,6 +13,7 @@ namespace apporo {
     public:
       MAMeCab();
       ~MAMeCab();
+      MeCab::Tagger *tagger;
       std::string getMAResult(std::string &str);
       std::string getRoman(std::string &str);
       std::string getYomi(std::string &str);

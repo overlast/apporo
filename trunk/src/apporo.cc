@@ -99,11 +99,16 @@ vector <string> Apporo::retrieve(string &query) {
   for (int i = 0; i < (int)result.size(); i++) {
     std::stringstream ss;
     string tmp;
+
+    if ((result_num > 0) && (i >= result_num)) { break; }
+    if ((nq != NULL) && (nq->dist_threshold > 0.0)) {
+      if (result[i].first < nq->dist_threshold) { continue;}
+    }
+
     ss << (result[i]).first;
     ss >> tmp;
     tmp += "\t" + (result[i]).second;
     res.push_back(tmp);
-    if (i >= result_num) { break; }
   }
   
   delete ngram_searcher;
