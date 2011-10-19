@@ -9,7 +9,7 @@ using namespace apporo::strdistance;
 namespace apporo {
   namespace util {
     string getFirstColumn(string entry, char boundary) {
-      string res;
+      string res = "";
       int entry_len = entry.size();
       for (int i = 0; i < entry_len; i++) {
 	if (entry[i] == boundary) {
@@ -17,6 +17,7 @@ namespace apporo {
 	  break;
 	}
       }
+      if (res == "") { res = entry; }
       return res;
     }
     
