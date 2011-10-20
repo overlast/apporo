@@ -35,4 +35,18 @@ bool ConfigFile::isThere(string key) {
   return res;
 }
 
-
+namespace apporo {
+  namespace config {
+    template <> bool ConfigFile::getValue<bool>(std::string key) {
+      bool res;
+      std::string tmp = conf[key];
+      if (tmp == "true") {
+	res = true;
+      }
+      else {
+	res = false;
+      }
+      return res;
+    }
+  }
+}

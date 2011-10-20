@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <sstream>
+#include <iostream>
 
 
 namespace apporo {
@@ -16,12 +17,13 @@ namespace apporo {
       ~ConfigFile();
       void readConfig();
       bool isThere(std::string key);
-      template <typename T> T getValue(std::string key) {
+      template <typename T> T ConfigFile::getValue(std::string key)  {
 	T res;
 	std::stringstream ss;
 	std::string tmp = conf[key];
 	ss << tmp;
 	ss >> res;
+	//std::cout << "tmp:res" << tmp << ":" << res << std::endl;
 	return res;
       }
     };

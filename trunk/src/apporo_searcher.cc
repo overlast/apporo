@@ -54,10 +54,12 @@ int main(int argc, char** argv) {
     }
 
     // N-gram query を生成
+    //cout << query << ":" << ngram_length << ":" << is_pre << ":" << is_suf << ":" << is_utf8 << ":" << dist_threshold << endl;
     NgramQuery *nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold); //engine に非依存
-
+    //cout << dist_func << ":" <<  nq->ngram_length << ":" << nq->chars_num << ":" << dist_threshold << endl;
     // 閾値がある場合は枝刈り用のパラメタも生成
     StringDistance *strdist = new StringDistance(dist_func, nq->ngram_length, nq->chars_num, dist_threshold); //engine に非依存
+    //cout << engine << ":" << index_path << ":" << entry_buf_len << endl;
     // 閾値がない場合はインスタンスができるだけ
     //StringDistance *strdist_no_threshold = new StringDistance(dist_func, ngram_length); //engine に非依存
 
@@ -73,7 +75,7 @@ int main(int argc, char** argv) {
     // Step1-2. 範囲から Doc ID を取得して集計
     vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
     vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size); //engine に依存
-
+    //cout << result_num << ":" << bucket_size << endl;
     // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
     vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size); //engine に依存
     
