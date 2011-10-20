@@ -80,6 +80,7 @@ vector <string> Apporo::retrieve(string &query) {
   vector <string> res;
   
   NgramQuery *nq;
+  //cout << query << ":" << ngram_length << ":" << is_pre << ":" << is_suf << ":" << is_utf8 << ":" << dist_threshold << endl;
   if (is_kana) {
     string ma_query = query;
     nq = new NgramQuery(ma_query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
@@ -87,19 +88,21 @@ vector <string> Apporo::retrieve(string &query) {
   else {
     nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
   }
-
+  //cout << dist_func << ":" <<  nq->ngram_length << ":" << nq->chars_num << ":" << dist_threshold << endl;
   StringDistance *strdist = new StringDistance(dist_func, nq->ngram_length, nq->chars_num, dist_threshold);
+  //cout << engine << ":" << index_path << ":" << entry_buf_len << endl;
   NgramSearch *ngram_searcher = new NgramSearch(engine, index_path, entry_buf_len);
   vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq);
 
   vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
   vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size);
+  //cout << result_num << ":" << bucket_size << endl;
   vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
   
   for (int i = 0; i < (int)result.size(); i++) {
     std::stringstream ss;
     string tmp;
-
+    
     if ((result_num > 0) && (i >= result_num)) { break; }
     if ((nq != NULL) && (nq->dist_threshold > 0.0)) {
       if (result[i].first < nq->dist_threshold) { continue;}

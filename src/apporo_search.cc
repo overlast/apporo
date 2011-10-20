@@ -130,14 +130,14 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
   for (vector <pair <sa_index, int> >::iterator bi = id_freq_vec.begin(), ei = id_freq_vec.end(); bi != ei; ++bi) {
     if ((result_num > 0) && (push_count == bucket_size)) { break; } // どうする
     pair <sa_index, int> item = *bi;
-    //cout << item.first << '/' << item.second << endl;
+
     char tmp_buf[this->entry_buf_len];
     tmp_buf[0] = '\0';
     sa_index pos;
     this->tdb->get_line(index_vec[item.first], tmp_buf, entry_buf_len, &pos);
-    //cout << tmp_buf << endl;
+
     string entry_str = getFirstColumn(tmp_buf, '\t');
-    //cout << entry_str << endl;
+    
     double dist = strdist->getStringDistance(strdist->dist_func, nq->query, entry_str, nq->utf8_boundary);
     if (dist > 0.0) {
       result.push_back(pair<double, string>(dist, (string)(tmp_buf[0] != '\0' ? tmp_buf : "")));
