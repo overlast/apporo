@@ -143,6 +143,9 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
     
     double dist = strdist->getStringDistance(strdist->dist_func, nq->query, entry_str, nq->utf8_boundary);
     if (dist > 0.0) {
+      if ((nq != NULL) && (nq->dist_threshold > 0.0)) {
+	if (dist < nq->dist_threshold) { continue;}
+      }
       result.push_back(pair<double, string>(dist, (string)(tmp_buf[0] != '\0' ? tmp_buf : "")));
       push_count++; // 足して良い時と悪い時がある
     }
