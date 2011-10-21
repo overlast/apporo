@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
     vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size); //engine に依存
     //cout << result_num << ":" << bucket_size << endl;
     // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
+
     vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size); //engine に依存
     
     // 結果を出力する

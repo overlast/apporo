@@ -97,6 +97,7 @@ vector <string> Apporo::retrieve(string &query) {
   vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
   vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size);
   //cout << result_num << ":" << bucket_size << endl;
+
   vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
   
   for (int i = 0; i < (int)result.size(); i++) {
