@@ -17,7 +17,7 @@ namespace apporo {
       ~ConfigFile();
       void readConfig();
       bool isThere(std::string key);
-      template <typename T> T ConfigFile::getValue(std::string key)  {
+      template <typename T> T getValue(std::string key)  {
 	T res;
 	std::stringstream ss;
 	std::string tmp = conf[key];
