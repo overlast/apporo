@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cstdlib>
 
 using namespace std;
 using namespace apporo;
