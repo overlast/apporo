@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "apporo_query.h"
 #include "apporo_strdistance.h"
 #include "apporo_search.h"
@@ -89,13 +90,13 @@ int main(int argc, char** argv) {
         delete nq;
       }
       else {
-        printf("Not Found.\n");
+        cout << "Not Found." << endl;
         res = 0;
       }
     }
     else {
-      printf("query parameter is empty. you must input query.\n");
-      res = 1;
+      cout << "Query parameter is empty. You must input query.." << endl;
+      res = 0;
     }
   } catch (const char *err) {
     cerr << err << endl;
