@@ -29,9 +29,11 @@ vector < pair<string, sa_range> > NgramSearch::getRange(NgramQuery *nq) {
     string query_str = *bi;
     sa_range p = this->tdb->search(query_str.c_str());
     //cout << query_str  << ":" << p.first << ":" << p.second << endl;
-    pair <string, sa_range> ngram_freq(query_str, p);
-    ngram_vector.push_back(ngram_freq);
-    //ngram_que_count++;
+    if (p.second >= 0) { // if result is found
+      pair <string, sa_range> ngram_freq(query_str, p);
+      ngram_vector.push_back(ngram_freq);
+      //ngram_que_count++;
+    }
   }
   sort(ngram_vector.begin(), ngram_vector.end(), sa_range_up_order());
   return ngram_vector;
@@ -51,40 +53,40 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
       pair <string, sa_range> item = (*bi);
       if ((item.second).first < 0) { continue; }
       for (sa_index i = (item.second).first, e = (item.second).second; i <= e; i++) {
-	sa_index id = tdb->getDID(i);
-	index_vec[id] = i;
-	id_count[id]++;
-	count++;
+        sa_index id = tdb->getDID(i);
+        index_vec[id] = i;
+        id_count[id]++;
+        count++;
       }
-    
+      
       if (ngram_que_limit <= 0) {
-	if (count > 0) {
-	  for (size_t i = 0; i < index_vec.size(); i++) {
-	    if ((id_count[i] != 0) && (id_count[i] + ngram_que_count < strdist->search_threshold[nq->min_hit_num].first)) {
-	      id_count[i] = 0;
-	      count--;
-	    }
-	    else {
-	      if (id_count[i] != 0) { }
-	    }
-	  }
-	}
-	int tmp_id_freq_vec_count = count;
-	if (id_freq_vec_count >= tmp_id_freq_vec_count) { break; }
-	else { id_freq_vec_count = tmp_id_freq_vec_count; }
+        if (count > 0) {
+          for (size_t i = 0; i < index_vec.size(); i++) {
+            if ((id_count[i] != 0) && (id_count[i] + ngram_que_count < strdist->search_threshold[nq->min_hit_num].first)) {
+              id_count[i] = 0;
+              count--;
+            }
+            else {
+              if (id_count[i] != 0) { }
+            }
+          }
+        }
+        int tmp_id_freq_vec_count = count;
+        if (id_freq_vec_count >= tmp_id_freq_vec_count) { break; }
+        else { id_freq_vec_count = tmp_id_freq_vec_count; }
       }
       else {
-	id_freq_vec_count = count;
+        id_freq_vec_count = count;
       }
       ngram_que_count--;
       ngram_que_limit--;
     }
-
+    
     if (count > 0) {
       for (size_t i = 0; i < index_vec.size(); i++) {
-	if (id_count[i] > 0) {
-	  id_freq_vec.push_back(pair<sa_index, int>(i, id_count[i]));
-	}
+        if (id_count[i] > 0) {
+          id_freq_vec.push_back(pair<sa_index, int>(i, id_count[i]));
+        }
       }
     }
     
@@ -101,17 +103,17 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
     for (vector < pair<string, sa_range> >::iterator bi = range_vector.begin(), ei = range_vector.end(); bi != ei; ++bi) {
       pair <string, sa_range> item = (*bi);
       for (sa_index i = (item.second).first, e = (item.second).second; i <= e; i++) {
-	sa_index id = tdb->getDID(i);
-	index_vec[id] = i;
-	id_count[id]++;
-	count++;
+        sa_index id = tdb->getDID(i);
+        index_vec[id] = i;
+        id_count[id]++;
+        count++;
       }
     }
     if (count > 0) {
       for (size_t i = 0; i < index_vec.size(); i++) {
-	if (id_count[i] > 0) {
-	  id_freq_vec.push_back(pair<sa_index, int>(i, id_count[i]));
-	}
+        if (id_count[i] > 0) {
+          id_freq_vec.push_back(pair<sa_index, int>(i, id_count[i]));
+        }
       }
       count = 0;
     }
@@ -134,7 +136,6 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
   for (vector <pair <sa_index, int> >::iterator bi = id_freq_vec.begin(), ei = id_freq_vec.end(); bi != ei; ++bi) {
     if ((result_num > 0) && (push_count == bucket_size)) { break; } // どうする
     pair <sa_index, int> item = *bi;
-
     char tmp_buf[this->entry_buf_len];
     tmp_buf[0] = '\0';
     sa_index pos;
@@ -144,7 +145,7 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
     double dist = strdist->getStringDistance(strdist->dist_func, nq->query, entry_str, nq->utf8_boundary);
     if (dist > 0.0) {
       if ((nq != NULL) && (nq->dist_threshold > 0.0)) {
-	if (dist < nq->dist_threshold) { continue;}
+        if (dist < nq->dist_threshold) { continue;}
       }
       result.push_back(pair<double, string>(dist, (string)(tmp_buf[0] != '\0' ? tmp_buf : "")));
       push_count++; // 足して良い時と悪い時がある
