@@ -78,36 +78,38 @@ void Apporo::prepare() {
 
 vector <string> Apporo::retrieve(string &query) {
   vector <string> res;
-  
-  NgramQuery *nq;
-  if (is_kana) {
-    string ma_query = query;
-    nq = new NgramQuery(ma_query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
+  if ((query.empty()) || (query == "")) {
   }
   else {
-    nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
+    NgramQuery *nq;
+    if (is_kana) {
+      string ma_query = query;
+      nq = new NgramQuery(ma_query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
+    }
+    else {
+      nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold);
+    }
+    StringDistance *strdist = new StringDistance(dist_func, nq->ngram_length, nq->chars_num, dist_threshold);
+    NgramSearch *ngram_searcher = new NgramSearch(engine, index_path, entry_buf_len);
+    vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq);
+    vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
+    vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size);
+    vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
+    
+    for (int i = 0; i < (int)result.size(); i++) {
+      std::stringstream ss;
+      string tmp;
+      if ((result_num > 0) && (i >= result_num)) { break; }
+      ss << (result[i]).first;
+      ss >> tmp;
+      tmp += "\t" + (result[i]).second;
+      res.push_back(tmp);
+    }
+    
+    delete ngram_searcher;
+    delete strdist;
+    delete nq;
   }
-  StringDistance *strdist = new StringDistance(dist_func, nq->ngram_length, nq->chars_num, dist_threshold);
-  NgramSearch *ngram_searcher = new NgramSearch(engine, index_path, entry_buf_len);
-  vector < pair<string, sa_range> > range_vector = ngram_searcher->getRange(nq);
-  vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
-  vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size);
-  vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
-  
-  for (int i = 0; i < (int)result.size(); i++) {
-    std::stringstream ss;
-    string tmp;
-    if ((result_num > 0) && (i >= result_num)) { break; }
-    ss << (result[i]).first;
-    ss >> tmp;
-    tmp += "\t" + (result[i]).second;
-    res.push_back(tmp);
-  }
-  
-  delete ngram_searcher;
-  delete strdist;
-  delete nq;
-
   return res;
 }
 
