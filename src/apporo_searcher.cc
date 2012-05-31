@@ -81,17 +81,22 @@ int main(int argc, char** argv) {
       
       if (id_freq_vec.size() > 0) {
         vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size); //engine に依存
-        
-        // 結果を出力する
-        showResult(result, nq, strdist, result_num); //engine に非依存
-        delete ngram_searcher;
-        delete strdist;
-        delete nq;
+        if (!result.empty()) {
+          // 結果を出力する
+          showResult(result, nq, strdist, result_num); //engine に非依存
+        }
+        else {
+          showMessage("Not Found.");
+          res = 0;
+        }
       }
       else {
         showMessage("Not Found.");
         res = 0;
       }
+      delete ngram_searcher;
+      delete strdist;
+      delete nq;
     }
     else {
       if (query != "") {
