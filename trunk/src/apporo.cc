@@ -1,6 +1,5 @@
 #include <vector>
 #include <string>
-#include <iostream>
 #include <sstream>
 #include "apporo.h"
 #include "apporo_util.h"
@@ -32,7 +31,6 @@ Apporo::~Apporo() {
 }
 
 void Apporo::prepare() {
-  
   ngram_length = 2;
   is_pre = false;
   is_suf = false;
@@ -68,9 +66,14 @@ void Apporo::prepare() {
   if (config->isThere("is_mecab")) { is_mecab = config->getValue<bool>("is_mecab"); }
   if (config->isThere("is_juman")) { is_juman = config->getValue<bool>("is_juman"); }
   if (config->isThere("is_kytea")) { is_kytea = config->getValue<bool>("is_kytea"); }
+  
+  if (isFileExist(index_path)) {}
+  else {
+    showMessage("Can't find your index file. You must set filepath of index config file.");
+    exit(1);
+  }
 
   if (is_mecab) {
-    
   }
   
   return;
@@ -96,16 +99,17 @@ vector <string> Apporo::retrieve(string &query) {
     vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size);
     vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
     
-    for (int i = 0; i < (int)result.size(); i++) {
-      std::stringstream ss;
-      string tmp;
-      if ((result_num > 0) && (i >= result_num)) { break; }
-      ss << (result[i]).first;
-      ss >> tmp;
-      tmp += "\t" + (result[i]).second;
-      res.push_back(tmp);
+    if (!result.empty()) {
+      for (int i = 0; i < (int)result.size(); i++) {
+        std::stringstream ss;
+        string tmp;
+        if ((result_num > 0) && (i >= result_num)) { break; }
+        ss << (result[i]).first;
+        ss >> tmp;
+        tmp += "\t" + (result[i]).second;
+        res.push_back(tmp);
+      }
     }
-    
     delete ngram_searcher;
     delete strdist;
     delete nq;

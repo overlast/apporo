@@ -1,5 +1,4 @@
 #include <string>
-#include <iostream>
 #include "apporo_query.h"
 #include "apporo_strdistance.h"
 #include "apporo_search.h"
@@ -54,7 +53,7 @@ int main(int argc, char** argv) {
       }
     }
     
-    if (query != "") {
+    if ((isFileExist(index_path)) && (query != "")) {
       // N-gram query を生成
       //cout << query << ":" << ngram_length << ":" << is_pre << ":" << is_suf << ":" << is_utf8 << ":" << dist_threshold << endl;
       NgramQuery *nq = new NgramQuery(query, ngram_length, is_pre, is_suf, is_utf8, dist_threshold); //engine に非依存
@@ -79,10 +78,10 @@ int main(int argc, char** argv) {
       vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size); //engine に依存
       //cout << result_num << ":" << bucket_size << endl;
       // Step2. Doc ID ごとにクエリとの類似度を測り、結果を出力する
-
+      
       if (id_freq_vec.size() > 0) {
         vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size); //engine に依存
-      
+        
         // 結果を出力する
         showResult(result, nq, strdist, result_num); //engine に非依存
         delete ngram_searcher;
@@ -90,13 +89,19 @@ int main(int argc, char** argv) {
         delete nq;
       }
       else {
-        cout << "Not Found." << endl;
+        showMessage("Not Found.");
         res = 0;
       }
     }
     else {
-      cout << "Query parameter is empty. You must input query.." << endl;
-      res = 0;
+      if (query != "") {
+        showMessage("Can't find your index file. You must set filepath of indexed file.");
+        res = 0;
+      }
+      else {
+        showMessage("Query parameter is empty. You must input query.");
+        res = 0;
+      }
     }
   } catch (const char *err) {
     cerr << err << endl;
