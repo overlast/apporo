@@ -1,10 +1,12 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include "apporo_util.h"
 #include "apporo_config.h"
 
 using namespace std;
 using namespace apporo;
+using namespace apporo::util;
 using namespace apporo::config;
 
 ConfigFile::ConfigFile(std::string &file_path_)
@@ -15,6 +17,12 @@ ConfigFile::ConfigFile(std::string &file_path_)
 ConfigFile::~ConfigFile() { return; };
 
 void ConfigFile::readConfig() {
+  if (isFileExist(file_path)) {}
+  else {
+    showMessage("Can't find your config file. You must set filepath of Apporo's config file.");
+    exit(1);
+  }
+  
   ifstream ifs;
   ifs.open((file_path).c_str());
   string key;
