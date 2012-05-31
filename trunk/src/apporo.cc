@@ -59,7 +59,7 @@ void Apporo::prepare() {
     if (config->isThere("index_path")) { index_path = config->getValue<string>("index_path"); }
     if (isFileExist(index_path)) {}
     else {
-      throw "Can't find your index file. You must set filepath of index config file.";
+      throw "Can't find your index file. You must set filepath of base file of index.";
     }
 
     if (config->isThere("dist_func")) { dist_func = config->getValue<string>("dist_func"); }
