@@ -37,7 +37,7 @@ void ConfigFile::readConfig() {
   }
   catch (const char* str) {
     showMessage(str);
-    exit(1);
+    terminate();
   }
   return;
 };
