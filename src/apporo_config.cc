@@ -17,22 +17,27 @@ ConfigFile::ConfigFile(std::string &file_path_)
 ConfigFile::~ConfigFile() { return; };
 
 void ConfigFile::readConfig() {
-  if (isFileExist(file_path)) {}
-  else {
-    showMessage("Can't find your config file. You must set filepath of Apporo's config file.");
-    exit(1);
-  }
   
-  ifstream ifs;
-  ifs.open((file_path).c_str());
-  string key;
-  string val;
-  while( !ifs.eof() ) {
-    ifs >> key;
-    ifs >> val;
-    if (conf.find(key) != conf.end()) {}
-    else { conf[key] = val; }
-    //cout << key << ":" << val << endl;
+  try {
+    if (isFileExist(file_path)) {}
+    else {
+      throw "Can't find your config file. You must set filepath of Apporo's config file.";
+    }
+    ifstream ifs;
+    ifs.open((file_path).c_str());
+    string key;
+    string val;
+    while( !ifs.eof() ) {
+      ifs >> key;
+      ifs >> val;
+      if (conf.find(key) != conf.end()) {}
+      else { conf[key] = val; }
+      //cout << key << ":" << val << endl;
+    }
+  }
+  catch (const char* str) {
+    showMessage(str);
+    exit(1);
   }
   return;
 };

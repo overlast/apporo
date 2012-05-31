@@ -49,33 +49,38 @@ void Apporo::prepare() {
   is_juman = false;
   is_kytea = false;
   
-  if (config->isThere("ngram_length")) { ngram_length = config->getValue<int>("ngram_length"); }
-  if (config->isThere("is_pre")) { is_pre = config->getValue<bool>("is_pre"); }
-  if (config->isThere("is_suf")) { is_suf = config->getValue<bool>("is_suf"); }
-  if (config->isThere("is_utf8")) { is_utf8 = config->getValue<bool>("is_utf8"); }
-  if (config->isThere("dist_threshold")) { dist_threshold = config->getValue<double>("dist_threshold"); }
-  if (config->isThere("index_path")) { index_path = config->getValue<string>("index_path"); }
-  if (config->isThere("dist_func")) { dist_func = config->getValue<string>("dist_func"); }
-  if (config->isThere("entry_buf_len")) { entry_buf_len = config->getValue<int>("entry_buf_len"); }
-  if (config->isThere("engine")) { engine = config->getValue<string>("engine"); }
-  if (config->isThere("result_num")) { result_num = config->getValue<int>("result_num"); }
-  if (config->isThere("bucket_size")) { bucket_size = config->getValue<int>("bucket_size"); }
-  if (config->isThere("is_surface")) { is_surface = config->getValue<bool>("is_surface"); }
-  if (config->isThere("is_kana")) { is_kana = config->getValue<bool>("is_kana"); }
-  if (config->isThere("is_roman")) { is_roman = config->getValue<bool>("is_roman"); }
-  if (config->isThere("is_mecab")) { is_mecab = config->getValue<bool>("is_mecab"); }
-  if (config->isThere("is_juman")) { is_juman = config->getValue<bool>("is_juman"); }
-  if (config->isThere("is_kytea")) { is_kytea = config->getValue<bool>("is_kytea"); }
-  
-  if (isFileExist(index_path)) {}
-  else {
-    showMessage("Can't find your index file. You must set filepath of index config file.");
+  try {
+    if (config->isThere("ngram_length")) { ngram_length = config->getValue<int>("ngram_length"); }
+    if (config->isThere("is_pre")) { is_pre = config->getValue<bool>("is_pre"); }
+    if (config->isThere("is_suf")) { is_suf = config->getValue<bool>("is_suf"); }
+    if (config->isThere("is_utf8")) { is_utf8 = config->getValue<bool>("is_utf8"); }
+    if (config->isThere("dist_threshold")) { dist_threshold = config->getValue<double>("dist_threshold"); }
+
+    if (config->isThere("index_path")) { index_path = config->getValue<string>("index_path"); }
+    if (isFileExist(index_path)) {}
+    else {
+      throw "Can't find your index file. You must set filepath of index config file.";
+    }
+
+    if (config->isThere("dist_func")) { dist_func = config->getValue<string>("dist_func"); }
+    if (config->isThere("entry_buf_len")) { entry_buf_len = config->getValue<int>("entry_buf_len"); }
+    if (config->isThere("engine")) { engine = config->getValue<string>("engine"); }
+    if (config->isThere("result_num")) { result_num = config->getValue<int>("result_num"); }
+    if (config->isThere("bucket_size")) { bucket_size = config->getValue<int>("bucket_size"); }
+    if (config->isThere("is_surface")) { is_surface = config->getValue<bool>("is_surface"); }
+    if (config->isThere("is_kana")) { is_kana = config->getValue<bool>("is_kana"); }
+    if (config->isThere("is_roman")) { is_roman = config->getValue<bool>("is_roman"); }
+    if (config->isThere("is_mecab")) { is_mecab = config->getValue<bool>("is_mecab"); }
+    if (config->isThere("is_juman")) { is_juman = config->getValue<bool>("is_juman"); }
+    if (config->isThere("is_kytea")) { is_kytea = config->getValue<bool>("is_kytea"); }
+
+    if (is_mecab) {
+    }
+  }
+  catch (const char* str) {
+    showMessage(str);
     exit(1);
   }
-
-  if (is_mecab) {
-  }
-  
   return;
 }
 
