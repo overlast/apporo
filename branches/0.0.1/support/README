@@ -1,0 +1,28 @@
+----
+2011/07/20
+
+If you use Mac OS X, maybe you couldn't install tsubomi.
+Because tsubomi's Makefile are not compatible with Mac OS X.
+I will feedbacked this problem to @echizen_tm.
+It got to be alright.
+tsubomi has no problem.
+
+----
+2011/07/20
+
+If you get the following message, it is bug of hashtable of MacOSX's gcc.
+
+> /usr/include/c++/4.0.0/tr1/hashtable: In member function 'typename std::tr1::hashtable<Key, Value, Allocator, ExtractKey, Equal, H1, H2, H, RehashPolicy, cache_hash_code, mutable_iterators, unique_keys>::size_type std::tr1::hashtable<Key, Value, Allocator, ExtractKey, Equal, H1, H2, H, RehashPolicy, cache_hash_code, mutable_iterators, unique_keys>::erase(const Key&) [with Key = int, Value = std::pair<const int, int>, Allocator = std::allocator<std::pair<const int, int> >, ExtractKey = Internal::extract1st<std::pair<const int, int> >, Equal = std::equal_to<int>, H1 = std::tr1::hash<int>, H2 = Internal::mod_range_hashing, H = Internal::default_ranged_hash, RehashPolicy = Internal::prime_rehash_policy, bool cache_hash_code = false, bool mutable_iterators = true, bool unique_keys = true]':
+> /usr/include/c++/4.0.0/tr1/hashtable:1363: warning: control reaches end of non-void function
+
+You have to replace /usr/include/c++/4.0.0/tr1/hashtable to ./MacOSX/usr/include/c++/4.0.0/tr1/hashtable 
+
+$ sudo mv /usr/include/c++/4.0.0/tr1/hashtable /usr/include/c++/4.0.0/tr1/hashtable.org
+$ cp apporo/support/MacOSX/usr/include/c++/4.0.0/tr1/hashtable /usr/include/c++/4.0.0/tr1/hashtable
+
+See also following link.
+http://permalink.gmane.org/gmane.comp.graphics.inkscape.devel/32990
+
+----
+
+
