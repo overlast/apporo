@@ -7,14 +7,20 @@ HDR = apporo_config.h apporo_query.h apporo_resultset.h apporo_search.h apporo_s
 UNAME = $(shell uname)
 
 tools: apporo_indexer apporo_searcher apporo
-apporo: apporo_config_test.cc libapporo.so.1.0
 
 apporo_indexer: $(HDR) apporo_tsubomi_db.cc apporo_index.cc
 	$(CC) -O2 -Wall -g apporo_tsubomi_db.cc apporo_index.cc -o apporo_indexer -ltsubomi
 apporo_searcher: $(HDR) apporo_searcher.cc apporo_utf8.cc apporo_util.cc apporo_tsubomi_db.cc apporo_query.cc apporo_strdistance.cc apporo_search.cc
 	$(CC) -O2 -Wall -g apporo_searcher.cc apporo_utf8.cc apporo_util.cc apporo_tsubomi_db.cc apporo_query.cc apporo_strdistance.cc apporo_search.cc -o apporo_searcher -ltsubomi
 
-libapporo.so.1.0: $(SRC) $(HDR)
+apporo: libapporo
+ifeq ($(UNAME), Darwin)
+	$(CC) -O2 -Wall -g apporo.o apporo_config_test.cc libapporo.1.0.dylib -o apporo
+else
+	$(CC) -O2 -Wall -g apporo.o apporo_config_test.cc libapporo.so.1.0 -o apporo
+endif
+	
+libapporo: $(SRC) $(HDR)
 	$(CC) -O2 -Wall -fPIC -g -c apporo.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_config.cc
 	$(CC) -O2 -Wall -fPIC -g -c apporo_utf8.cc
@@ -27,7 +33,7 @@ libapporo.so.1.0: $(SRC) $(HDR)
 	$(CC) -O2 -Wall -fPIC -g -c apporo_clang.cc
 
 ifeq ($(UNAME), Darwin)
-	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.1.0.dylib -o libapporo.so.1.0.dylib apporo_tsubomi_db.o apporo_clang.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
+	$(CC) -O2 -Wall -g -dynamiclib -Wl,-dylib_install_name,libapporo.1.0.dylib -o libapporo.1.0.dylib apporo_tsubomi_db.o apporo_clang.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
 else
 	$(CC) -O2 -Wall -g -shared -Wl,-soname,libapporo.so.1 -o libapporo.so.1.0 apporo_tsubomi_db.o apporo_clang.o apporo.o apporo_config.o apporo_utf8.o apporo_util.o apporo_query.o apporo_strdistance.o apporo_search.o apporo_index.o -ltsubomi
 endif
