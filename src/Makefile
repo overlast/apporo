@@ -1,8 +1,7 @@
 CC  = /usr/bin/g++
-PREFIX = /usr/local/Cellar/apporo/0.0.1-01/ 
-BIN = /usr/local/Cellar/apporo/0.0.1-01/bin/
-LIB = /usr/local/Cellar/apporo/0.0.1-01/lib/
-INC = /usr/local/Cellar/apporo/0.0.1-01/include/
+BIN = /usr/local/bin/
+LIB = /usr/local/lib/
+INC = /usr/local/include/
 SRC = apporo_config.cc apporo_config_test.cc apporo_index.cc apporo_query.cc apporo_resultset.cc apporo_search.cc apporo_searcher.cc apporo_strdistance.cc apporo_tsubomi_db.cc apporo_utf8.cc apporo_util.cc apporo_clang.cc
 HDR = apporo_config.h apporo_query.h apporo_resultset.h apporo_search.h apporo_strdistance.h apporo_tsubomi_db.h apporo_utf8.h apporo_util.h apporo_clang.h
 UNAME = $(shell uname)
@@ -52,18 +51,6 @@ clean:
 	- rm -f libapporo.a
 
 install:
-	if [ ! -d $(PREFIX) ]; then \
-		echo ";; mkdir -p $(PREFIX)"; mkdir -p $(PREFIX); \
-	fi
-	if [ ! -d $(LIB) ]; then \
-		echo ";; mkdir $(LIB)"; mkdir $(LIB); \
-	fi
-	if [ ! -d $(BIN) ]; then \
-		echo ";; mkdir $(BIN)"; mkdir $(BIN); \
-	fi
-	if [ ! -d $(INC) ]; then \
-		echo ";; mkdir $(INC)"; mkdir $(INC); \
-	fi
 ifeq ($(UNAME), Linux)
 	cp libapporo.so.1.0 $(LIB)
 	cp libapporo.a $(LIB)
@@ -73,7 +60,7 @@ else
 ifeq ($(UNAME), Darwin)
 	cp libapporo.1.0.dylib $(LIB)
 	cp libapporo.a $(LIB)
-	ln -fs $(LIB)libapporo.1.0.dylib $(LIB)libappro.1.dylib
+	ln -fs $(LIB)libapporo.1.0.dylib $(LIB)libapporo.1.dylib
 	ln -fs $(LIB)libapporo.1.dylib $(LIB)libapporo.dylib
 else
 	cp libapporo.so.1.0 $(LIB)
@@ -87,19 +74,7 @@ endif
 	cp apporo_indexer $(BIN)
 	cp apporo_searcher $(BIN)
 	cp apporo.h $(INC)
-	cp apporo_ma_interface.h $(INC)
-	cp apporo_search.h $(INC)
-	cp apporo_utf8.h $(INC)
-	cp apporo_clang.h $(INC)
-	cp apporo_ma_mecab.h $(INC)
-	cp apporo_storage.h $(INC)
-	cp apporo_util.h $(INC)
-	cp apporo_config.h $(INC)
-	cp apporo_query.h $(INC)
-	cp apporo_strdistance.h $(INC)
-	cp apporo_ma.h $(INC)
-	cp apporo_resultset.h $(INC)
-	cp apporo_tsubomi_db.h $(INC)
+	cp apporo_*.h $(INC)
 
 uninstall:
 	- rm -f $(LIB)libapporo.so
@@ -110,17 +85,5 @@ uninstall:
 	- rm -f $(BIN)apporo_indexer
 	- rm -f $(BIN)apporo_searcher
 	- rm -f $(INC)apporo.h
-	- rm -f $(INC)apporo_ma_interface.h
-	- rm -f $(INC)apporo_search.h
-	- rm -f $(INC)apporo_utf8.h
-	- rm -f $(INC)apporo_clang.h
-	- rm -f $(INC)apporo_ma_mecab.h
-	- rm -f $(INC)apporo_storage.h
-	- rm -f $(INC)apporo_util.h
-	- rm -f $(INC)apporo_config.h
-	- rm -f $(INC)apporo_query.h
-	- rm -f $(INC)apporo_strdistance.h
-	- rm -f $(INC)apporo_ma.h
-	- rm -f $(INC)apporo_resultset.h
-	- rm -f $(INC)apporo_tsubomi_db.h
+	- rm -f $(INC)apporo_*.h
 
