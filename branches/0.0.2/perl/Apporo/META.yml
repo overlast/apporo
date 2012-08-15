@@ -1,5 +1,5 @@
 ---
-abstract: ~
+abstract: 'Perl binding for Apporo(Approximate String Matching Engine)'
 author:
   - 'Toshinori Satou <overlasting {at} gmail.com>'
 build_requires:
@@ -21,4 +21,4 @@ no_index:
     - xt
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.01
+version: 0.000001
