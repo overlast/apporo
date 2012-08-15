@@ -22,13 +22,13 @@ namespace apporo {
     sa_index TsubomiDBSearch::binaryDIDSearch(sa_index &offset, sa_index begin, sa_index end) {
       sa_index res = -1;
       while (begin <= end) {
-	sa_index pivot = (begin + end) / 2;
-	//cout << pivot << ":" << begin << ":" << end << endl;
-	int ret = offset - mr_did_[pivot];
-	//cout << ret << endl;
-	if (ret < 0) { end =  pivot - 1; }
-	else if (ret > 0) { begin = pivot + 1; }
-	else { res = pivot; break; }
+        sa_index pivot = (begin + end) / 2;
+        //cout << pivot << ":" << begin << ":" << end << endl;
+        int ret = offset - mr_did_[pivot];
+        //cout << ret << endl;
+        if (ret < 0) { end =  pivot - 1; }
+        else if (ret > 0) { begin = pivot + 1; }
+        else { res = pivot; break; }
       }
       if (begin > end) { res = begin; }
       //cout << res << endl;
@@ -67,19 +67,19 @@ namespace apporo {
       tsubomi::progress_bar prg(int(N / 40));
       if (is_progress) { cerr << "+--------------------------------------+" << endl; }
       for (sa_index offset = 0; offset < mr_file_.size(); offset++) {
-	if (is_progress) { prg.progress(1); }
-	int b_size = boundary.size();
-	for (int i = 0; i < b_size; i++) {
-	  if (mr_file_[offset] == boundary[i]) {
-	    did.push_back(offset);
-	    break;
-	  }
-	}
+        if (is_progress) { prg.progress(1); }
+        int b_size = boundary.size();
+        for (int i = 0; i < b_size; i++) {
+          if (mr_file_[offset] == boundary[i]) {
+            did.push_back(offset);
+            break;
+          }
+        }
       }
       // write did index as "filename.did"
       FILE *fout = fopen(did_path.c_str(), "wb");
       if (fout == NULL) {
-	throw "error at TsubomiDBIndex::makeDIDIndex(). filename.did cannot open for write.";
+        throw "error at TsubomiDBIndex::makeDIDIndex(). filename.did cannot open for write.";
       }
       TsubomiDBWrite writer(fout);
       writer.write(did);
@@ -87,50 +87,104 @@ namespace apporo {
       if (is_progress) {  cout << endl << "done!" << endl; }
       return;
     }
-    
+
     void TsubomiDBIndex::mkary_make(vector<sa_index> &sa, const char *seps, bool is_utf8) {
-      // read index from file
+      // read index from a target file
       if (is_utf8) {
-	if (seps[0] == '\t') {
-	  bool flg = true;
-	  for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
-	    if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
-	    else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
-	    else {
-	      if (flg) { sa.push_back(offset); }
-	    }
-	  }
-	}
-	else {
-	  for (sa_index offset = 0;
-	       offset < this->mr_file_.size();
-	       offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
-	    sa.push_back(offset);
-	  }
-	}
+        if (seps[0] == '\0') {
+          // UTF-8 & Head of the each lines
+          bool flg = true;
+          for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
+            if (flg) { sa.push_back(offset); flg = false; }
+            else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
+          }
+        }
+        else if (seps[0] == '\t') {
+          // UTF-8 & All Characters in a first column of the each lines of TSV file
+          bool flg = true;
+          for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
+            if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
+            else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
+            else {
+              if (flg) { sa.push_back(offset); }
+            }
+          }
+        }
+        else {
+          // UTF-8 & Head of the each lines
+          bool flg = true;
+          for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
+            if (flg) { sa.push_back(offset); flg = false; }
+            else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
+          }
+        }
+
+        /*
+        else if (seps[0] == '\n') {
+          // UTF-8 & All Character in the each lines of target file
+          for (sa_index offset = 0;
+               offset < this->mr_file_.size();
+               offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])])
+            {
+              sa.push_back(offset);
+            }
+        }
+        else {
+          // UTF-8 & Each character of after the word booundaly characters(' ', '\t', '\n', '.', ',', '!', '?', '(', '[')
+          bool flg = true;
+          for (sa_index offset = 0; offset < this->mr_file_.size(); offset += utf8_char_size[(unsigned char)(this->mr_file_[offset])]) {
+            if (flg) { sa.push_back(offset); flg = false; }
+            for (int i = 0; seps[i] != '\0'; i++) {
+              if (this->mr_file_[offset] == seps[i]) { flg = true; break; }
+            }
+          }
+        }
+        */
       } else if (seps[0] == '\0') {
-	for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
-	  sa.push_back(offset);
-	}
+        // ASCII & Head of the each lines
+        bool flg = true;
+        for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
+          if (flg) { sa.push_back(offset); flg = false; }
+          if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
+        }
       } else if (seps[0] == '\t') {
-	bool flg = true;
-	for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
-	  if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
-	  else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
-	  else {
-	    if (flg) { sa.push_back(offset); }
-	  }
-	}
+        // ASCII & All Characters in a first column of the each lines of TSV file
+        bool flg = true;
+        for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
+          if ((flg) && (this->mr_file_[offset] == '\t')) { sa.push_back(offset); flg = false; }
+          else if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
+          else {
+            if (flg) { sa.push_back(offset); }
+          }
+        }
       }
       else {
-	bool flg = true;
-	for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
-	  if (flg) { sa.push_back(offset); flg = false; }
-	  for (int i = 0; seps[i] != '\0'; i++) {
-	    if (this->mr_file_[offset] == seps[i]) { flg = true; }
-	  }
-	}
+        // ASCII & Head of the each lines
+        bool flg = true;
+        for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
+          if (flg) { sa.push_back(offset); flg = false; }
+          if (this->mr_file_[offset] == '\n') { sa.push_back(offset); flg = true; }
+        }
       }
+
+      /*
+      else if (seps[0] == '\n') {
+        // ASCII & All Character in the each lines of target file
+        for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
+          sa.push_back(offset);
+        }
+      }
+      else {
+        // ASCII & Each character of after the word booundaly characters(' ', '\t', '\n', '.', ',', '!', '?', '(', '[')
+        bool flg = true;
+        for (sa_index offset = 0; offset < this->mr_file_.size(); offset++) {
+          if (flg) { sa.push_back(offset); flg = false; }
+          for (int i = 0; seps[i] != '\0'; i++) {
+            if (this->mr_file_[offset] == seps[i]) { flg = true; break; }
+          }
+        }
+      }
+      */
       return;
     }
   }
