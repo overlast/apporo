@@ -42,10 +42,10 @@ int main (int argc, char** argv) {
         case 'h': is_help     = true;       break;
         case 'b':
           switch (argv[i][2]) {
-          case 'l': boundary = "\n"; break;
-          case 'c': boundary = "\t\n"; break;
-          case 'w': boundary = " \t\n"; break;
           case 't': boundary = "\t"; break;
+            //case 'n': boundary = "\n"; break;
+          case 'h': boundary = "\0"; break;
+            //case 'w': boundary = " \t\n.,?!(["; break;
           }
         default: param = argv[i][1]; break;
         }
