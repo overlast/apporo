@@ -15,9 +15,9 @@ apporo_searcher: $(HDR) apporo_searcher.cc apporo_utf8.cc apporo_util.cc apporo_
 
 apporo: libapporo
 ifeq ($(UNAME), Darwin)
-	$(CC) -O2 -Wall -g apporo.o apporo_config_test.cc libapporo.1.0.dylib -o apporo
+	$(CC) -O2 -Wall -g apporo_config_test.cc libapporo.1.0.dylib -o apporo
 else
-	$(CC) -O2 -Wall -g apporo.o apporo_config_test.cc libapporo.so.1.0 -o apporo
+	$(CC) -O2 -Wall -g apporo_config_test.cc libapporo.so.1.0 -o apporo
 endif
 	
 libapporo: $(SRC) $(HDR)
