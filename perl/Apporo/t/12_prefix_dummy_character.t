@@ -5,9 +5,9 @@ use autodie;
 
 use Apporo;
 
-use Test::More tests => 10;
+use Test::More tests => 18;
 
-my $index_path = "/tmp/p5_apporo_index_03.tsv";
+my $index_path = "/tmp/p5_apporo_index_12.tsv";
 my $out_index;
 open ($out_index, "> $index_path");
 
@@ -349,17 +349,18 @@ system("apporo_indexer -i $index_path -d");
     isnt($file_size, 0, "$file_name has data entity");
 }
 
-my $conf_path = "/tmp/p5_apporo_conf_03.tsv";
+my $conf_path = "/tmp/p5_apporo_conf_12.tsv";
 my $out_conf;
-open ($out_conf, "> $conf_path");
 
-my $conf = << "__CONF__";
-ngram_length	2
+{
+    open ($out_conf, "> $conf_path");
+    my $conf = << "__CONF__";
+ngram_length	1
 is_pre	true
-is_suf	true
+is_suf	false
 is_utf8	false
 dist_threshold	0.0
-index_path	/tmp/p5_apporo_index_03.tsv
+index_path	/tmp/p5_apporo_index_12.tsv
 dist_func	edit
 entry_buf_len	1024
 engine	tsubomi
@@ -373,36 +374,32 @@ is_juman	false
 is_kytea	false
 __CONF__
 
-print $out_conf $conf;
+    print $out_conf $conf;
+    close ($out_conf);
 
-close ($out_conf);
-
-{
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(ASCII, 2-gram, insert dummy character to head and tail of query e.t.c.) of apporo search";
+    my $file_name = "configure file(ASCII, 1-gram, insert dummy character to head of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
-}
 
-my $app = Apporo->new($conf_path);
+    my $app = Apporo->new($conf_path);
 
-{
-    my $query = "emacs";
+    my $query = "sourceinstall";
     my @arr = @{$app->retrieve($query)};
     my @res = (
-        "1	emacs	10-Jun-2012 04:30",
-        "0.6	emms	16-Sep-2008 13:10",
-        "0.428571	gnumach	02-Aug-2003 07:13",
-        "0.4	marst	16-Nov-2007 08:25",
-        "0.4	xaos	02-Aug-2003 07:15",
-        "0.4	make	29-Aug-2011 14:01",
-        "0.4	rcs	05-Jun-2012 06:40",
-        "0.4	pies	12-Dec-2009 07:30",
-        "0.4	less	17-Apr-2011 17:00",
-        "0.4	edma	08-Apr-2010 14:05",
+        "1	sourceinstall	20-Jul-2008 22:25",
+        "0.384615	GNUsBulletins	24-Mar-2003 18:00",
+        "0.384615	coreutils	12-Aug-2012 05:00",
+        "0.307692	guile-ncurses	03-Feb-2011 08:20",
+        "0.307692	spacechart	14-Aug-2003 11:04",
+        "0.307692	libunistring	02-May-2010 17:45",
+        "0.307692	recutils	13-Jan-2012 06:20",
+        "0.307692	sharutils	29-Apr-2011 14:20",
+        "0.307692	ghostscript	01-Jan-2012 20:45",
+        "0.307692	trueprint	02-Aug-2003 07:15",
     );
     my %hash_res = ();
     for (my $i = 0; $i <= $#res; $i++) {
@@ -417,12 +414,200 @@ my $app = Apporo->new($conf_path);
         my $key = $cels[0].$cels[1];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get the result from the indexes whose index points are all charactors of first column using '$query' query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:1 from the indexes using '$query' query with prefix dummy character");
 }
 
 {
-    my $query = "2012";
+    open ($out_conf, "> $conf_path");
+    my $conf = << "__CONF__";
+ngram_length	2
+is_pre	true
+is_suf	false
+is_utf8	false
+dist_threshold	0.0
+index_path	/tmp/p5_apporo_index_12.tsv
+dist_func	edit
+entry_buf_len	1024
+engine	tsubomi
+result_num	10
+bucket_size	2000
+is_surface	true
+is_kana	false
+is_roman	false
+is_mecab	false
+is_juman	false
+is_kytea	false
+__CONF__
+
+    print $out_conf $conf;
+    close ($out_conf);
+
+    my $is_there_file = 0;
+    my $file_path = $conf_path;
+    my $file_name = "configure file(ASCII, 2-gram, insert dummy character to head of query e.t.c.) of apporo search";
+    if( -f $file_path ) { $is_there_file = 1; }
+    is($is_there_file, 1, "write $file_name to /tmp");
+    my $file_size = -s $file_path;
+    isnt($file_size, 0, "$file_name has data entity");
+
+    my $app = Apporo->new($conf_path);
+
+    my $query = "sourceinstall";
     my @arr = @{$app->retrieve($query)};
-    my @res = ();
-    is_deeply(\@arr, \@res, "'$query' is not include in first colmun of target data");
+    my @res = (
+        "1	sourceinstall	20-Jul-2008 22:25",
+        "0.384615	GNUsBulletins	24-Mar-2003 18:00",
+        "0.307692	gnusound	06-Jul-2008 05:00",
+        "0.307692	Licenses	15-Aug-2012 00:45",
+        "0.307692	sauce	02-Aug-2003 07:15",
+        "0.307692	smalltalk	22-Mar-2011 03:40",
+        "0.307692	spacechart	14-Aug-2003 11:04",
+        "0.307692	spell	21-Jul-2011 15:30",
+        "0.307692	libffcall	16-Jun-2008 12:35",
+        "0.307692	libunistring	02-May-2010 17:45",
+    );
+    my %hash_res = ();
+    for (my $i = 0; $i <= $#res; $i++) {
+        $res[$i] = $res[$i];
+        my @cels = split /\t/, $res[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_res{$key} = $res[$i];
+    }
+    my %hash_arr = ();
+    for (my $i = 0; $i <= $#arr; $i++) {
+        my @cels = split /\t/, $arr[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_arr{$key} = $arr[$i];
+    }
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:2 from the indexes using '$query' query with prefix dummy character");
+}
+
+{
+    open ($out_conf, "> $conf_path");
+    my $conf = << "__CONF__";
+ngram_length	3
+is_pre	true
+is_suf	false
+is_utf8	false
+dist_threshold	0.0
+index_path	/tmp/p5_apporo_index_12.tsv
+dist_func	edit
+entry_buf_len	1024
+engine	tsubomi
+result_num	10
+bucket_size	2000
+is_surface	true
+is_kana	false
+is_roman	false
+is_mecab	false
+is_juman	false
+is_kytea	false
+__CONF__
+
+    print $out_conf $conf;
+    close ($out_conf);
+
+    my $is_there_file = 0;
+    my $file_path = $conf_path;
+    my $file_name = "configure file(ASCII, 3-gram, insert dummy character to head of query e.t.c.) of apporo search";
+    if( -f $file_path ) { $is_there_file = 1; }
+    is($is_there_file, 1, "write $file_name to /tmp");
+    my $file_size = -s $file_path;
+    isnt($file_size, 0, "$file_name has data entity");
+
+    my $app = Apporo->new($conf_path);
+
+    my $query = "sourceinstall";
+    my @arr = @{$app->retrieve($query)};
+    my @res = (
+        "1	sourceinstall	20-Jul-2008 22:25",
+        "0.384615	GNUsBulletins	24-Mar-2003 18:00",
+        "0.307692	superopt	02-Aug-2003 07:15",
+        "0.307692	smalltalk	22-Mar-2011 03:40",
+        "0.307692	spacechart	14-Aug-2003 11:04",
+        "0.307692	spell	21-Jul-2011 15:30",
+        "0.307692	sauce	02-Aug-2003 07:15",
+        "0.307692	libffcall	16-Jun-2008 12:35",
+        "0.307692	gnusound	06-Jul-2008 05:00",
+        "0.307692	screen	07-Aug-2008 06:35",
+    );
+    my %hash_res = ();
+    for (my $i = 0; $i <= $#res; $i++) {
+        $res[$i] = $res[$i];
+        my @cels = split /\t/, $res[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_res{$key} = $res[$i];
+    }
+    my %hash_arr = ();
+    for (my $i = 0; $i <= $#arr; $i++) {
+        my @cels = split /\t/, $arr[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_arr{$key} = $arr[$i];
+    }
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:3 from the indexes using '$query' query with prefix dummy character");
+}
+
+{
+    open ($out_conf, "> $conf_path");
+    my $conf = << "__CONF__";
+ngram_length	4
+is_pre	true
+is_suf	false
+is_utf8	false
+dist_threshold	0.0
+index_path	/tmp/p5_apporo_index_12.tsv
+dist_func	edit
+entry_buf_len	1024
+engine	tsubomi
+result_num	10
+bucket_size	2000
+is_surface	true
+is_kana	false
+is_roman	false
+is_mecab	false
+is_juman	false
+is_kytea	false
+__CONF__
+
+    print $out_conf $conf;
+    close ($out_conf);
+
+    my $is_there_file = 0;
+    my $file_path = $conf_path;
+    my $file_name = "configure file(ASCII, 4-gram, insert dummy character to head of query e.t.c.) of apporo search";
+    if( -f $file_path ) { $is_there_file = 1; }
+    is($is_there_file, 1, "write $file_name to /tmp");
+    my $file_size = -s $file_path;
+    isnt($file_size, 0, "$file_name has data entity");
+
+    my $app = Apporo->new($conf_path);
+
+    my $query = "sourceinstall";
+    my @arr = @{$app->retrieve($query)};
+    my @res = (
+        "1	sourceinstall	20-Jul-2008 22:25",
+        "0.307692	screen	07-Aug-2008 06:35",
+        "0.307692	superopt	02-Aug-2003 07:15",
+        "0.307692	spacechart	14-Aug-2003 11:04",
+        "0.307692	spell	21-Jul-2011 15:30",
+        "0.307692	sauce	02-Aug-2003 07:15",
+        "0.307692	sharutils	29-Apr-2011 14:20",
+        "0.307692	smalltalk	22-Mar-2011 03:40",
+        "0.230769	sovix	15-Dec-2008 06:55",
+        "0.230769	sipwitch	25-Apr-2012 16:30",
+    );
+    my %hash_res = ();
+    for (my $i = 0; $i <= $#res; $i++) {
+        $res[$i] = $res[$i];
+        my @cels = split /\t/, $res[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_res{$key} = $res[$i];
+    }
+    my %hash_arr = ();
+    for (my $i = 0; $i <= $#arr; $i++) {
+        my @cels = split /\t/, $arr[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_arr{$key} = $arr[$i];
+    }
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:4 from the indexes using '$query' query with prefix dummy character");
 }
