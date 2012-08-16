@@ -7,7 +7,7 @@ use Apporo;
 
 use Test::More tests => 10;
 
-my $index_path = "/tmp/p5_apporo_index_03.tsv";
+my $index_path = "/tmp/p5_apporo_index_04.tsv";
 my $out_index;
 open ($out_index, "> $index_path");
 
@@ -322,7 +322,7 @@ close ($out_index);
     my $file_path = $index_path;
     my $file_name = "sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
@@ -331,9 +331,9 @@ system("apporo_indexer -i $index_path -bh");
 {
     my $is_there_file = 0;
     my $file_path = $index_path.".ary";
-    my $file_name = "apporo ASCII ary index of first colmun of sample data file";
+    my $file_name = "apporo ASCII ary index for head of each line of sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
@@ -342,24 +342,24 @@ system("apporo_indexer -i $index_path -d");
 {
     my $is_there_file = 0;
     my $file_path = $index_path.".did";
-    my $file_name = "apporo ASCII did index of sample data file";
+    my $file_name = "apporo ASCII did index for sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
 
-my $conf_path = "/tmp/p5_apporo_conf_03.tsv";
+my $conf_path = "/tmp/p5_apporo_conf_04.tsv";
 my $out_conf;
 open ($out_conf, "> $conf_path");
 
 my $conf = << "__CONF__";
-ingram_length	2
+ngram_length	2
 is_pre	false
 is_suf	false
 is_utf8	false
 dist_threshold	0.0
-index_path	/tmp/p5_apporo_index_03.tsv
+index_path	/tmp/p5_apporo_index_04.tsv
 dist_func	edit
 entry_buf_len	1024
 engine	tsubomi
@@ -380,9 +380,9 @@ close ($out_conf);
 {
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(ASCII, 2-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(ASCII, 2-gram, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
@@ -404,12 +404,25 @@ my $app = Apporo->new($conf_path);
         "0.285714	mailman	15-Jun-2012 12:50",
         "0.2	acct	05-Nov-2010 15:45",
     );
-    is_deeply(\@arr, \@res, "get result from index of first colmun of target data using '$query' query");
+    my %hash_res = ();
+    for (my $i = 0; $i <= $#res; $i++) {
+        $res[$i] = $res[$i];
+        my @cels = split /\t/, $res[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_res{$key} = $res[$i];
+    }
+    my %hash_arr = ();
+    for (my $i = 0; $i <= $#arr; $i++) {
+        my @cels = split /\t/, $arr[$i];
+        my $key = $cels[0].$cels[1];
+        $hash_arr{$key} = $arr[$i];
+    }
+    is_deeply(\%hash_arr, \%hash_res, "get the result from the indexes whose index points are only heads of line using using '$query' query");
 }
 
 {
     my $query = "2012";
     my @arr = @{$app->retrieve($query)};
     my @res = ();
-    is_deeply(\@arr, \@res, "'$query' is not include in first colmun of target data");
+    is_deeply(\@arr, \@res, "'$query' is not included in first colmun of target data");
 }
