@@ -838,7 +838,7 @@ my $app = Apporo->new($conf_path);
         my $key = $cels[0].$cels[1].$cels[6];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get the result from the indexes whose index point is only head of line using ".encode_utf8($query)." query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result from the indexes whose index points are only heads of line using ".encode_utf8($query)." query");
 }
 
 {
