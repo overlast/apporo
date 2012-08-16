@@ -356,8 +356,8 @@ my $out_conf;
     open ($out_conf, "> $conf_path");
     my $conf = << "__CONF__";
 ngram_length	1
-is_pre	true
-is_suf	true
+is_pre	false
+is_suf	false
 is_utf8	false
 dist_threshold	0.0
 index_path	/tmp/p5_apporo_index_11.tsv
@@ -379,7 +379,7 @@ __CONF__
 
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(ASCII, 1-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(ASCII, 1-gram e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "success to write $file_name to /tmp");
     my $file_size = -s $file_path;
@@ -444,7 +444,7 @@ __CONF__
 
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(ASCII, 2-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(ASCII, 2-gram e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "success to write $file_name to /tmp");
     my $file_size = -s $file_path;
@@ -509,7 +509,7 @@ __CONF__
 
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(ASCII, 3-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(ASCII, 3-gram e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "success to write $file_name to /tmp");
     my $file_size = -s $file_path;
@@ -571,7 +571,7 @@ __CONF__
 
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(ASCII, 4-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(ASCII, 4-gram e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "success to write $file_name to /tmp");
     my $file_size = -s $file_path;
