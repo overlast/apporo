@@ -8,7 +8,7 @@ use Apporo;
 
 use Test::More tests => 18;
 
-my $index_path = "/tmp/p5_apporo_index_08.tsv";
+my $index_path = "/tmp/p5_apporo_index_09.tsv";
 my $out_index;
 open ($out_index, "> $index_path");
 
@@ -777,7 +777,7 @@ system("apporo_indexer -i $index_path -d");
     isnt($file_size, 0, "$file_name has data entity");
 }
 
-my $conf_path = "/tmp/p5_apporo_conf_08.tsv";
+my $conf_path = "/tmp/p5_apporo_conf_09.tsv";
 my $out_conf;
 
 {
@@ -788,7 +788,7 @@ is_pre	true
 is_suf	true
 is_utf8	true
 dist_threshold	0.0
-index_path	/tmp/p5_apporo_index_08.tsv
+index_path	/tmp/p5_apporo_index_09.tsv
 dist_func	edit
 entry_buf_len	1024
 engine	tsubomi
@@ -886,7 +886,7 @@ is_pre	true
 is_suf	true
 is_utf8	true
 dist_threshold	0.0
-index_path	/tmp/p5_apporo_index_08.tsv
+index_path	/tmp/p5_apporo_index_09.tsv
 dist_func	edit
 entry_buf_len	1024
 engine	tsubomi
@@ -984,7 +984,7 @@ is_pre	true
 is_suf	true
 is_utf8	true
 dist_threshold	0.0
-index_path	/tmp/p5_apporo_index_08.tsv
+index_path	/tmp/p5_apporo_index_09.tsv
 dist_func	edit
 entry_buf_len	1024
 engine	tsubomi
@@ -1075,7 +1075,7 @@ is_pre	true
 is_suf	true
 is_utf8	true
 dist_threshold	0.0
-index_path	/tmp/p5_apporo_index_08.tsv
+index_path	/tmp/p5_apporo_index_09.tsv
 dist_func	edit
 entry_buf_len	1024
 engine	tsubomi
