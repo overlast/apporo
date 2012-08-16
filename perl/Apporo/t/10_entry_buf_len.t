@@ -805,7 +805,7 @@ __CONF__
     close ($out_conf);
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(UTF-8, 2-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(UTF-8, 2-gram, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "success to write $file_name to /tmp");
     my $file_size = -s $file_path;
@@ -868,7 +868,7 @@ __CONF__
     close ($out_conf);
     my $is_there_file = 0;
     my $file_path = $conf_path;
-    my $file_name = "configure file(UTF-8, 2-gram, insert dummy character to prefix & suffix e.t.c.) of apporo search";
+    my $file_name = "configure file(UTF-8, 2-gram, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "success to write $file_name to /tmp");
     my $file_size = -s $file_path;
