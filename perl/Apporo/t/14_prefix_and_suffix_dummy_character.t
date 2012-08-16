@@ -414,7 +414,7 @@ __CONF__
         my $key = $cels[0].$cels[1];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:1 from the indexes using '$query' query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:1 from the indexes using '$query' query with prefix and suffix dummy character");
 }
 
 {
@@ -479,7 +479,7 @@ __CONF__
         my $key = $cels[0].$cels[1];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:2 from the indexes using '$query' query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:2 from the indexes using '$query' query with prefix and suffix dummy character");
 }
 
 {
@@ -543,7 +543,7 @@ __CONF__
         my $key = $cels[0].$cels[1];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:3 from the indexes using '$query' query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:3 from the indexes using '$query' query with prefix and suffix dummy character");
 }
 
 {
@@ -608,5 +608,5 @@ __CONF__
         my $key = $cels[0].$cels[1];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:4 from the indexes using '$query' query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of ngram_num:4 from the indexes using '$query' query with prefix and suffix dummy character");
 }
