@@ -322,7 +322,7 @@ close ($out_index);
     my $file_path = $index_path;
     my $file_name = "sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
@@ -333,7 +333,7 @@ system("apporo_indexer -i $index_path -bt");
     my $file_path = $index_path.".ary";
     my $file_name = "apporo ASCII ary index of first colmun of sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
@@ -344,7 +344,7 @@ system("apporo_indexer -i $index_path -d");
     my $file_path = $index_path.".did";
     my $file_name = "apporo ASCII did index of sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
 }
@@ -381,7 +381,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.0, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -444,7 +444,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.1, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -507,7 +507,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.2, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -570,7 +570,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.3, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -633,7 +633,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.399999, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -696,7 +696,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.4, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -759,7 +759,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.428570, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -815,7 +815,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.5, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -870,7 +870,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.599999, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -925,7 +925,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.6, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -980,7 +980,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.7, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -1034,7 +1034,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.8, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -1088,7 +1088,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.9, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -1142,7 +1142,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=0.999999, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
@@ -1196,7 +1196,7 @@ __CONF__
     my $file_path = $conf_path;
     my $file_name = "configure file(ASCII, 2-gram, dist_threshold=1.0, insert dummy character to head and tail of query e.t.c.) of apporo search";
     if( -f $file_path ) { $is_there_file = 1; }
-    is($is_there_file, 1, "success to write $file_name to /tmp");
+    is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
     isnt($file_size, 0, "$file_name has data entity");
     my $app = Apporo->new($conf_path);
