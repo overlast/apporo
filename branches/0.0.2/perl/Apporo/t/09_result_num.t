@@ -739,7 +739,7 @@ my $data = << "__DATA__";
 鰐淵洋子	わにぶちようこ	公明党	比例	参-307号室	電話03-3508-8307	FAX03-5512-2307
 __DATA__
 
-print $out_index $data;
+print $out_index encode_utf8($data);
 
 system("LC_ALL=C sort $index_path > $index_path.sort");
 system("mv $index_path.sort $index_path");
