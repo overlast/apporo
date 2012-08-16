@@ -759,7 +759,7 @@ system("apporo_indexer -i $index_path -bt");
 {
     my $is_there_file = 0;
     my $file_path = $index_path.".ary";
-    my $file_name = "apporo UTF-8 ary index of first colmun of sample data file";
+    my $file_name = "apporo UTF-8 ary index for first colmun of sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
@@ -770,7 +770,7 @@ system("apporo_indexer -i $index_path -d");
 {
     my $is_there_file = 0;
     my $file_path = $index_path.".did";
-    my $file_name = "apporo UTF-8 did index of sample data file";
+    my $file_name = "apporo UTF-8 did index for sample data file";
     if( -f $file_path ) { $is_there_file = 1; }
     is($is_there_file, 1, "write $file_name to /tmp");
     my $file_size = -s $file_path;
