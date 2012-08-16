@@ -875,7 +875,7 @@ __CONF__
         my $key = $cels[0].$cels[1].$cels[6];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get result from index limiting result_num:50 using ".encode_utf8($query)." query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of result_num:50 from the indexes using ".encode_utf8($query)." query");
 }
 
 {
@@ -972,7 +972,7 @@ __CONF__
         my $key = $cels[0].$cels[1].$cels[6];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get result from index limiting result_num:45 using ".encode_utf8($query)." query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of result_num:45 from the indexes using ".encode_utf8($query)." query");
 }
 
 
@@ -1064,7 +1064,7 @@ __CONF__
         my $key = $cels[0].$cels[1].$cels[6];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get result from index limiting result_num:39 using ".encode_utf8($query)." query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of result_num:39 from the indexes using ".encode_utf8($query)." query");
 }
 
 {
@@ -1121,5 +1121,5 @@ __CONF__
         my $key = $cels[0].$cels[1].$cels[6];
         $hash_arr{$key} = $arr[$i];
     }
-    is_deeply(\%hash_arr, \%hash_res, "get result from index limiting result_num:5 using ".encode_utf8($query)." query");
+    is_deeply(\%hash_arr, \%hash_res, "get the result which is limited by the parameter of result_num:5 from the indexes using ".encode_utf8($query)." query");
 }
