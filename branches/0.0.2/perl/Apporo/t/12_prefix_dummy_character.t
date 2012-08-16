@@ -357,7 +357,7 @@ my $out_conf;
     my $conf = << "__CONF__";
 ngram_length	1
 is_pre	true
-is_suf	true
+is_suf	false
 is_utf8	false
 dist_threshold	0.0
 index_path	/tmp/p5_apporo_index_12.tsv
@@ -421,7 +421,7 @@ __CONF__
     open ($out_conf, "> $conf_path");
     my $conf = << "__CONF__";
 ngram_length	2
-is_pre	false
+is_pre	true
 is_suf	false
 is_utf8	false
 dist_threshold	0.0
@@ -457,14 +457,14 @@ __CONF__
     my @res = (
         "1	sourceinstall	20-Jul-2008 22:25",
         "0.384615	GNUsBulletins	24-Mar-2003 18:00",
-        "0.307692	libunistring	02-May-2010 17:45",
-        "0.307692	octave	31-May-2012 13:40",
-        "0.307692	smalltalk	22-Mar-2011 03:40",
         "0.307692	gnusound	06-Jul-2008 05:00",
-        "0.307692	paperclips	02-Aug-2003 17:08",
-        "0.307692	ncurses	04-Apr-2011 19:15",
         "0.307692	Licenses	15-Aug-2012 00:45",
+        "0.307692	sauce	02-Aug-2003 07:15",
+        "0.307692	smalltalk	22-Mar-2011 03:40",
+        "0.307692	spacechart	14-Aug-2003 11:04",
+        "0.307692	spell	21-Jul-2011 15:30",
         "0.307692	libffcall	16-Jun-2008 12:35",
+        "0.307692	libunistring	02-May-2010 17:45",
     );
     my %hash_res = ();
     for (my $i = 0; $i <= $#res; $i++) {
