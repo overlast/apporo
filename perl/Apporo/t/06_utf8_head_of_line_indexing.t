@@ -783,7 +783,7 @@ open ($out_conf, "> $conf_path");
 
 my $conf = << "__CONF__";
 ngram_length	2
-is_pre	true
+is_pre	false
 is_suf	false
 is_utf8	true
 dist_threshold	0.0
@@ -822,8 +822,6 @@ my $app = Apporo->new($conf_path);
     my @arr = @{$app->retrieve($query)};
     my @res = (
         "0.5	津川祥吾	つがわしょうご	民主党	静岡02区	衆2-701号室	電話03-3508-7451	FAX03-3508-3281",
-        "0.25	津島恭一	つしまきょういち	民主党	東北比例	衆1-543号室	電話03-3508-7267	FAX03-3508-3543",
-        "0.25	津村啓介	つむらけいすけ	民主党	岡山02区	衆2-338号室	電話03-3508-7088	FAX03-3508-3868",
     );
     my %hash_res = ();
     for (my $i = 0; $i <= $#res; $i++) {
