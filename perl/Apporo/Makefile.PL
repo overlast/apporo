@@ -48,7 +48,7 @@ makemaker_args->{CC} = 'g++';
 makemaker_args->{LD} = 'g++';
 makemaker_args->{OPTIMIZE} = '-O2';
 makemaker_args->{XSOPT} = '-C++';
-makemaker_args->{LDDLFLAGS} = "-shared -O2 -fstack-protector ".$ld_pathes[0];
+#makemaker_args->{LDDLFLAGS} = "-shared -O2 -fstack-protector ".$ld_pathes[0];
 makemaker_args->{LDFLAGS} = "-fstack-protector ".$ld_pathes[0];
 makemaker_args->{LIBS} = $ld_pathes[0]." -lapporo -ltsubomi";
 
