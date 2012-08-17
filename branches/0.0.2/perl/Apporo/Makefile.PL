@@ -5,12 +5,8 @@ name 'Apporo';
 all_from 'lib/Apporo.pm';
 
 cc_src_paths qw/xs/;
-makemaker_args->{C} = ['xs/Apporo.cc'];
-makemaker_args->{XS}->{'xs/Apporo.xs'} = 'xs/Apporo.cc';
-
-
-use YAML ;print Dump makemaker_args;
-
+#makemaker_args->{C} = ['xs/Apporo.cc'];
+#makemaker_args->{XS}->{'xs/Apporo.xs'} = 'xs/Apporo.cc';
 
 can_cc or die "This module requires a C compiler";
 
@@ -55,8 +51,6 @@ makemaker_args->{XSOPT} = '-C++';
 makemaker_args->{LDDLFLAGS} = "-shared -O2 -fstack-protector ".$ld_pathes[0];
 makemaker_args->{LDFLAGS} = "-fstack-protector ".$ld_pathes[0];
 makemaker_args->{LIBS} = $ld_pathes[0]." -lapporo -ltsubomi";
-
-use YAML ;print Dump makemaker_args;
 
 =pod
 makemaker_args(
