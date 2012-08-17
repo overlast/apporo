@@ -3,6 +3,11 @@
 ^Apporo.c$
 ^Apporo.o$
 ^Apporo.bs$
+^MYMETA.json
+^MYMETA.yml
+^ppport.h
+^xs/Apporo.c
+^xs/Apporo.o
 ^MANIFEST\.
 ^Makefile$
 ~$
