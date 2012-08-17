@@ -783,11 +783,7 @@ open ($out_conf, "> $conf_path");
 
 my $conf = << "__CONF__";
 ngram_length	2
-<<<<<<< HEAD
-is_pre	true
-=======
 is_pre	false
->>>>>>> my_0.0.2
 is_suf	false
 is_utf8	true
 dist_threshold	0.0
