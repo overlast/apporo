@@ -11,7 +11,7 @@ using namespace apporo::query;
 DeleteID::DeleteID(int num){ threshold = num; return; }
 DeleteID::~DeleteID() { return; }
 
-NgramSearch::NgramSearch (string &engine_, string &index_path_, int entry_buf_len_) 
+NgramSearch::NgramSearch (string &engine_, string &index_path_, int entry_buf_len_)
   : engine(engine_), index_path(index_path_), entry_buf_len(entry_buf_len_) {
   if (engine == "tsubomi") {
     tdb = new TsubomiDBSearch(index_path);
@@ -58,7 +58,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
         id_count[id]++;
         count++;
       }
-      
+
       if (ngram_que_limit <= 0) {
         if (count > 0) {
           for (size_t i = 0; i < index_vec.size(); i++) {
@@ -81,7 +81,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
       ngram_que_count--;
       ngram_que_limit--;
     }
-    
+
     if (count > 0) {
       for (size_t i = 0; i < index_vec.size(); i++) {
         if (id_count[i] > 0) {
@@ -89,7 +89,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
         }
       }
     }
-    
+
     //cout << "size: " << id_freq_vec.size() << endl;
     vector< pair <sa_index, int> >::iterator id_freq_vec_end_it;
     vector< pair <sa_index, int> >::iterator id_delete_it = remove_if(id_freq_vec.begin(), id_freq_vec_end_it, DeleteID(strdist->search_threshold[nq->min_hit_num].second));
@@ -118,7 +118,7 @@ vector < pair <sa_index, int> > NgramSearch::getIDMap(vector <sa_index> &index_v
       count = 0;
     }
   }
-  
+
   if (id_freq_vec.size() > 0) {
     if ((0 != bucket_size) && ((int)id_freq_vec.size() > bucket_size)) {
       partial_sort(id_freq_vec.begin(), id_freq_vec.begin() + bucket_size, id_freq_vec.end(), pair_second_low_order());
@@ -141,7 +141,7 @@ vector < pair <double, string> > NgramSearch::rerankAndGetResult(vector < pair <
     sa_index pos;
     this->tdb->get_line(index_vec[item.first], tmp_buf, entry_buf_len, &pos);
     string entry_str = getFirstColumn(tmp_buf, '\t');
-    
+
     double dist = strdist->getStringDistance(strdist->dist_func, nq->query, entry_str, nq->utf8_boundary);
     if (dist > 0.0) {
       if ((nq != NULL) && (nq->dist_threshold > 0.0)) {

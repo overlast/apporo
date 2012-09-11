@@ -25,7 +25,7 @@ Apporo::Apporo(string &config_file_path_)
   return;
 }
 
-Apporo::~Apporo() { 
+Apporo::~Apporo() {
   delete config;
   return;
 }
@@ -48,7 +48,7 @@ void Apporo::prepare() {
   is_mecab = false;
   is_juman = false;
   is_kytea = false;
-  
+
   try {
     if (config->isThere("ngram_length")) { ngram_length = config->getValue<int>("ngram_length"); }
     if (config->isThere("is_pre")) { is_pre = config->getValue<bool>("is_pre"); }
@@ -103,7 +103,7 @@ vector <string> Apporo::retrieve(string &query) {
     vector <sa_index> index_vec(ngram_searcher->tdb->entry_num, 0);
     vector < pair <sa_index, int> > id_freq_vec = ngram_searcher->getIDMap(index_vec, range_vector, nq, strdist, bucket_size);
     vector < pair <double, string> > result = ngram_searcher->rerankAndGetResult(id_freq_vec, index_vec, nq, strdist, result_num, bucket_size);
-    
+
     if (!result.empty()) {
       for (int i = 0; i < (int)result.size(); i++) {
         std::stringstream ss;
@@ -121,4 +121,3 @@ vector <string> Apporo::retrieve(string &query) {
   }
   return res;
 }
-
