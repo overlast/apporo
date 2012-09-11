@@ -12,7 +12,7 @@ using namespace apporo::strdistance;
 
 
 StringDistance::StringDistance(string &dist_func_, int ngram_length_, int query_chars_num_, double dist_threshold_)
-  : dist_func(dist_func_), ngram_length(ngram_length_), query_chars_num(query_chars_num_), dist_threshold(dist_threshold_) { 
+  : dist_func(dist_func_), ngram_length(ngram_length_), query_chars_num(query_chars_num_), dist_threshold(dist_threshold_) {
   if ((dist_threshold_ > 0.0) && (query_chars_num > 0)) {
     search_threshold = getSearchThreshold(dist_func, query_chars_num, ngram_length, dist_threshold);
   }
@@ -51,28 +51,28 @@ vector < pair <int, int> > StringDistance::getSearchThreshold(string &dist_func,
     int maxY = 100000;
     max = (int)(dist_threshold * (double)std::min(X, maxY));
   }
-  
+
   for (int i = 0; i < 256; i++) {
     if (i > 0) {
       if ("dice" == dist_func) {
-	int tmp_min_y = min_y;
-	if (tmp_min_y < i) { tmp_min_y = i; }
-	min = (int)(0.5 * dist_threshold * ((double)(X) + (double)(tmp_min_y)));
+        int tmp_min_y = min_y;
+        if (tmp_min_y < i) { tmp_min_y = i; }
+        min = (int)(0.5 * dist_threshold * ((double)(X) + (double)(tmp_min_y)));
       }
       else if ("jaccard" == dist_func) {
-	int tmp_min_y = min_y;
-	if (tmp_min_y < i) { tmp_min_y = i; }
-	min = (int)((dist_threshold * ((double)(X) + (double)(tmp_min_y))) / (1.0 + dist_threshold));
+        int tmp_min_y = min_y;
+        if (tmp_min_y < i) { tmp_min_y = i; }
+        min = (int)((dist_threshold * ((double)(X) + (double)(tmp_min_y))) / (1.0 + dist_threshold));
       }
       else if ("cosine" == dist_func) {
-	int tmp_min_y = min_y;
-	if (tmp_min_y < i) { tmp_min_y = i; }
-	min = (int)(dist_threshold * sqrt((double)(X) * (double)(tmp_min_y)) + 0.5);
+        int tmp_min_y = min_y;
+        if (tmp_min_y < i) { tmp_min_y = i; }
+        min = (int)(dist_threshold * sqrt((double)(X) * (double)(tmp_min_y)) + 0.5);
       }
       else if ("overlap" == dist_func) {
-	int tmp_min_y = min_y;
-	if (tmp_min_y < i) { tmp_min_y = i; }
-	min = (int)(dist_threshold * (double)std::min(X, tmp_min_y));
+        int tmp_min_y = min_y;
+        if (tmp_min_y < i) { tmp_min_y = i; }
+        min = (int)(dist_threshold * (double)std::min(X, tmp_min_y));
       }
       if (min < 0) { min = 0; }
       if (max < 0) { max = 0; }
@@ -117,13 +117,13 @@ double StringDistance::getEditDist(string &str1, string &str2) {
   for (int i = 0; i < str1_len; i++) {
     for (int j = 0; j < str2_len; j++) {
       if (str1[i] == str2[j]) {
-	matrix[i + 1][j + 1] = matrix[i][j];
+        matrix[i + 1][j + 1] = matrix[i][j];
       }
       else {
-	int min = matrix[i][j]; // left+up
-	if (matrix[i][j + 1] < min) { min = matrix[i][j + 1];  }//left
-	else if (matrix[i + 1][j] < min) { min = matrix[i + 1][j]; }//up
-	matrix[i + 1][j + 1] = min + 1;
+        int min = matrix[i][j]; // left+up
+        if (matrix[i][j + 1] < min) { min = matrix[i][j + 1];  }//left
+        else if (matrix[i + 1][j] < min) { min = matrix[i + 1][j]; }//up
+        matrix[i + 1][j + 1] = min + 1;
       }
     }
   }
@@ -175,7 +175,7 @@ double StringDistance::getUTF8BPMEditDist(string &str1, vector <int> &vec1, stri
     }
     VP |= one << i;
   }
-  
+
   for (int j = 0, focus = 0; j < n; focus += v2[j], j++) {
     T X;
     string s2v2 = s2.substr(focus, v2[j]);
@@ -193,7 +193,7 @@ double StringDistance::getUTF8BPMEditDist(string &str1, vector <int> &vec1, stri
 
   //cout << "err:" << err << " m:"<< m << endl;
   res = 1.0 - ((double)err / (double)m);
-  
+
   return res;
 }
 
@@ -209,7 +209,7 @@ double StringDistance::getBPMEditDist(string &str1, string &str2) {
 
   int m = s1.size();
   int n = s2.size();
-  
+
   if (m > bit_len) { m = bit_len * 8; }
   if (n > bit_len) { n = bit_len * 8; }
 
@@ -217,7 +217,7 @@ double StringDistance::getBPMEditDist(string &str1, string &str2) {
   T VP = 0;
   T VN = 0;
   int err = m;
-  
+
   map <char, T> B; // when UTF8, char have to replace with string.
   for (int i = 0; i < m; i++) {
     if (B.find(s1[i]) != B.end()) {
@@ -256,7 +256,7 @@ double StringDistance::getUTF8EditDist(string &str1, string &str2) {
 }
 
 double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string &str2) {
-  
+
   double res = 0.0;
   vector <int> vec2 = apporo::utf8::getUTF8Width(str2);
   int vec1_len = vec1.size();
@@ -269,14 +269,14 @@ double StringDistance::getUTF8EditDist(string &str1, vector <int> &vec1, string 
   for (int i = 0, focus1 = 0; i < vec1_len; focus1 += vec1[i], i++) {
     for (int j = 0, focus2 = 0; j < vec2_len; focus2 += vec2[j], j++) {
       if ((vec1[i] == vec2[j]) && (0 == str1.compare(focus1, vec1[i], str2, focus2, vec2[j]))) {
-	matrix[i + 1][j + 1] = matrix[i][j];
+        matrix[i + 1][j + 1] = matrix[i][j];
       }
       else {
-	int min = matrix[i][j]; // left+up
-	if (matrix[i][j + 1] < min) { min = matrix[i][j + 1];  }//left
-	else if (matrix[i + 1][j] < min) { min = matrix[i + 1][j]; }//up
-	matrix[i + 1][j + 1] = min + 1;
-	  }
+        int min = matrix[i][j]; // left+up
+        if (matrix[i][j + 1] < min) { min = matrix[i][j + 1];  }//left
+        else if (matrix[i + 1][j] < min) { min = matrix[i + 1][j]; }//up
+        matrix[i + 1][j + 1] = min + 1;
+      }
     }
   }
   res =  1.0 - ((double)matrix[vec1_len][vec2_len] / (double)matrix_width);
@@ -298,7 +298,7 @@ double StringDistance::getStringDistance(string &str_dist, string &str1, string 
       dist = getBPMEditDist<unsigned long long>(str1, str2);
     }
     else {
-	dist = getEditDist(str1, str2);
+      dist = getEditDist(str1, str2);
     }
   }
   return dist;
