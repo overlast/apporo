@@ -13,7 +13,7 @@ using namespace apporo::strdistance;
 
 StringDistance::StringDistance(string &dist_func_, int ngram_length_, int query_chars_num_, double dist_threshold_)
   : dist_func(dist_func_), ngram_length(ngram_length_), query_chars_num(query_chars_num_), dist_threshold(dist_threshold_) {
-  if ((dist_threshold_ > 0.0) && (query_chars_num > 0)) {
+  if ((dist_threshold > 0.0) && (query_chars_num > 0)) {
     search_threshold = getSearchThreshold(dist_func, query_chars_num, ngram_length, dist_threshold);
   }
   return;
@@ -28,10 +28,11 @@ vector < pair <int, int> > StringDistance::getSearchThreshold(string &dist_func,
   int min_y = 0;
 
   if ("edit" == dist_func) {
-    min = (X) - (int)(((double)(X) * (1.0 - dist_threshold) * (double)ngram_length) + 0.5);
-    max = (X) - (int)(((double)(X) * (1.0 - dist_threshold) + (double)ngram_length) + 0.5);
+    //min = (X) - (int)(((double)(X) * (1.0 - dist_threshold) * (double)ngram_length) + 0.5);
+    //max = (X) - (int)(((double)(X) * (1.0 - dist_threshold) + (double)ngram_length) + 0.5);
+    dist_func = "cosine";
   }
-  else if ("dice" == dist_func) {
+  if ("dice" == dist_func) {
     min_y = (int)(((dist_threshold / (2.0 - dist_threshold)) * (double)X) + 0.5);
     int maxY = (int)((((2.0 - dist_threshold) / dist_threshold) * (double)X) + 0.5);
     max = (int)(0.5 * dist_threshold * ((double)(X) + (double)(maxY)));
